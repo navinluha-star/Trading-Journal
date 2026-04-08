@@ -1,1678 +1,548 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apex Terminal Elite | v4.0</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lumin Pathlab – Accurate Diagnostics, Trusted Care</title>
+<meta name="description" content="Lumin Pathlab offers 500+ diagnostic tests with home collection, fast reports and affordable pricing. NABL accredited laboratory."/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#fff;--fg:hsl(213,61%,14%);--primary:hsl(174,100%,33%);--primary-fg:#fff;--secondary:hsl(200,100%,39%);--gold:hsl(38,90%,55%);--off-white:hsl(206,44%,97%);--gray-50:hsl(208,33%,95%);--gray-100:hsl(207,27%,90%);--gray-300:hsl(200,11%,71%);--gray-500:hsl(200,14%,46%);--gray-700:hsl(199,15%,26%);--navy:hsl(213,61%,14%);--navy-deep:hsl(214,73%,9%);--teal:hsl(174,100%,33%);--teal-light:hsl(161,98%,40%);--sky:hsl(197,100%,39%);--destructive:hsl(4,74%,55%);--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',system-ui,sans-serif}
+body{font-family:var(--font-body);background:var(--bg);color:var(--fg);line-height:1.6}
+a{text-decoration:none;color:inherit}button{cursor:pointer;border:none;font-family:inherit}input,select,textarea{font-family:inherit}
+.gradient-text{background:linear-gradient(135deg,var(--teal),var(--sky));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.gradient-bg{background:linear-gradient(135deg,var(--teal),var(--sky))}
+.gradient-bg-dark{background:linear-gradient(135deg,var(--navy-deep),var(--navy))}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--gray-50)}::-webkit-scrollbar-thumb{background:var(--teal);border-radius:3px}
+.cat-blood{background:hsla(4,74%,55%,0.1);color:hsl(4,74%,55%)}.cat-full{background:hsla(174,100%,33%,0.1);color:var(--teal)}.cat-hormone{background:hsla(38,90%,55%,0.1);color:var(--gold)}.cat-cardiac{background:hsla(197,100%,39%,0.1);color:var(--sky)}.cat-thyroid{background:hsla(271,50%,47%,0.1);color:#7B1FA2}.cat-diabetes{background:hsla(16,100%,57%,0.1);color:#E64A19}.cat-liver{background:hsla(122,40%,39%,0.1);color:#388E3C}.cat-kidney{background:hsla(174,100%,24%,0.1);color:#00796B}.cat-vitamin{background:hsla(44,97%,58%,0.1);color:#F9A825}.cat-other{background:hsla(200,14%,46%,0.1);color:var(--gray-500)}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes pulse-dot{0%,100%{box-shadow:0 0 0 0 hsla(174,100%,33%,0.5)}50%{box-shadow:0 0 0 6px hsla(174,100%,33%,0)}}
+@keyframes modal-in{from{transform:scale(0.9);opacity:0}to{transform:scale(1);opacity:1}}
+.animate-fade-in-up{animation:fadeInUp .6s ease both}.animate-float{animation:float 3s ease-in-out infinite}.animate-pulse-dot{animation:pulse-dot 2s infinite}.animate-modal-in{animation:modal-in .3s cubic-bezier(.34,1.56,.64,1)}
 
-    <style>
-        :root {
-            --bg: #0a0e17;
-            --surface: #0f1623;
-            --surface2: #141c2e;
-            --border: #1e2d47;
-            --accent: #00e5a0;
-            --accent2: #0066ff;
-            --accent3: #ff4060;
-            --accent4: #f59e0b;
-            --text: #e0e8f0;
-            --text-dim: #4a6080;
-            --text-mid: #8aa4c0;
-            --win: #00e5a0;
-            --loss: #ff4060;
-            --grid-line: rgba(30,45,71,0.8);
-        }
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:72px;background:rgba(255,255,255,0.85);backdrop-filter:blur(18px);border-bottom:1px solid var(--gray-100);transition:box-shadow .3s}
+.navbar.scrolled{box-shadow:0 4px 20px rgba(0,0,0,0.08)}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;letter-spacing:-1px;color:var(--primary-fg);box-shadow:0 4px 14px hsla(174,100%,33%,0.35)}
+.nav-links{display:flex;align-items:center;gap:8px;list-style:none}
+.nav-links a{padding:8px 16px;border-radius:4px;font-size:.875rem;font-weight:500;color:var(--gray-700);transition:all .2s}
+.nav-links a:hover{background:var(--gray-50);color:var(--primary)}
+.nav-cta{padding:8px 20px;border-radius:4px;color:var(--primary-fg);font-size:.875rem;font-weight:600;box-shadow:0 4px 14px hsla(174,100%,33%,0.3);transition:all .2s}
+.nav-cta:hover{transform:translateY(-2px)}
+.hamburger{display:none;flex-direction:column;gap:5px;width:38px;height:38px;padding:8px;border-radius:4px;background:var(--gray-50)}
+.hamburger span{display:block;width:100%;height:2px;background:var(--fg);border-radius:2px}
+.mobile-menu{display:none;position:fixed;top:72px;left:0;right:0;z-index:999;background:var(--bg);border-bottom:1px solid var(--gray-100);padding:16px;flex-direction:column;gap:4px;box-shadow:0 4px 20px rgba(0,0,0,0.08)}
+.mobile-menu.open{display:flex}
+.mobile-menu a,.mobile-menu button{display:block;padding:12px 16px;border-radius:4px;font-weight:500;color:var(--gray-700);background:none;font-size:1rem;text-align:left;transition:all .2s}
+@media(max-width:768px){.nav-links,.nav-cta{display:none!important}.hamburger{display:flex}}
 
-        * { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+.hero{min-height:100vh;padding:100px 5% 80px;display:flex;align-items:center;position:relative;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;max-width:1300px;margin:0 auto;width:100%}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:99px;border:1px solid hsla(174,100%,33%,0.25);font-size:.75rem;font-weight:600;color:var(--primary);letter-spacing:.08em;text-transform:uppercase;margin-bottom:24px;background:linear-gradient(135deg,hsla(174,100%,33%,0.1),hsla(197,100%,39%,0.1))}
+.hero h1{font-family:var(--font-display);font-size:clamp(2.4rem,5vw,3.8rem);line-height:1.1;font-weight:800;margin-bottom:20px}
+.hero p.hero-desc{font-size:1rem;color:var(--gray-500);max-width:480px;margin-bottom:36px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:44px}
+.hero-btns .btn-primary{padding:14px 28px;border-radius:8px;color:var(--primary-fg);font-weight:600;font-size:.95rem;box-shadow:0 6px 24px hsla(174,100%,33%,0.35);transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.hero-btns .btn-primary:hover{transform:translateY(-2px)}
+.hero-btns .btn-outline{padding:14px 28px;border-radius:8px;font-weight:600;font-size:.95rem;border:2px solid var(--gray-100);background:transparent;color:var(--fg);transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.hero-btns .btn-outline:hover{border-color:var(--primary);color:var(--primary)}
+.hero-stats{display:flex;gap:32px;flex-wrap:wrap}
+.hero-stats .stat-num{font-family:var(--font-display);font-size:1.875rem;font-weight:700;line-height:1}
+.hero-stats .stat-label{font-size:.75rem;color:var(--gray-500);margin-top:4px;text-transform:uppercase;letter-spacing:.08em}
+.hero-card{background:var(--bg);border-radius:12px;padding:28px;box-shadow:0 8px 32px rgba(0,0,0,0.12);border:1px solid var(--gray-100);position:relative;overflow:hidden}
+.hero-card .top-bar{position:absolute;top:0;left:0;right:0;height:4px}
+.hero-card .rated{position:absolute;top:-12px;right:24px;background:var(--gold);color:var(--primary-fg);font-size:.7rem;font-weight:700;padding:6px 12px;border-radius:99px;text-transform:uppercase}
+.hero-card .label{font-size:.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.15em;margin-bottom:16px}
+.hero-card .test-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:8px;background:var(--off-white);margin-bottom:8px}
+.hero-card .test-row:hover{background:hsla(174,100%,33%,0.07)}
+.hero-card .test-row .tname{font-size:.875rem;font-weight:600}
+.hero-card .test-row .tcat{font-size:.75rem;color:var(--gray-500)}
+.hero-card .test-row .tprice{font-weight:700;color:var(--primary);font-size:.95rem}
+.hero-float{position:absolute;background:var(--bg);border-radius:8px;padding:12px 16px;box-shadow:0 4px 16px rgba(0,0,0,0.1);border:1px solid var(--gray-100);display:flex;align-items:center;gap:12px}
+.hero-float .icon-box{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.25rem}
+.hero-right{position:relative;z-index:1}
+@media(max-width:1024px){.hero-grid{grid-template-columns:1fr}.hero-right{display:none}}
 
-        body {
-            background: var(--bg);
-            font-family: 'Barlow Condensed', sans-serif;
-            color: var(--text);
-            overflow-x: hidden;
-        }
+.stats-bar{padding:44px 5%}.stats-bar .sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;max-width:1100px;margin:0 auto}
+.stats-bar .stat{text-align:center;padding:20px}.stats-bar .stat .num{font-family:var(--font-display);font-size:2.5rem;font-weight:800;line-height:1}
+.stats-bar .stat .lbl{font-size:.875rem;color:rgba(255,255,255,0.65);margin-top:8px;text-transform:uppercase;letter-spacing:.08em}
+@media(max-width:768px){.stats-bar .sgrid{grid-template-columns:repeat(2,1fr)}}
 
-        /* Scanline effect overlay */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0,0,0,0.03) 2px,
-                rgba(0,0,0,0.03) 4px
-            );
-            pointer-events: none;
-            z-index: 9999;
-        }
+.section-header{text-align:center;max-width:600px;margin:0 auto 52px}
+.section-header .tag{display:inline-block;padding:4px 14px;border-radius:99px;background:hsla(174,100%,33%,0.1);color:var(--primary);font-size:.75rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px}
+.section-header h2{font-family:var(--font-display);font-size:clamp(1.8rem,3.5vw,2.6rem);line-height:1.15;font-weight:700;margin-bottom:14px}
+.section-header p{color:var(--gray-500);font-size:.95rem}
 
-        /* Grid bg */
-        body::after {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(0,229,160,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,229,160,0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            pointer-events: none;
-            z-index: 0;
-        }
+.tests-section{padding:80px 5%;background:var(--off-white)}
+.tests-filters{display:flex;gap:14px;flex-wrap:wrap;max-width:900px;margin:0 auto 36px}
+.tests-filters .search-wrap{flex:1;min-width:240px;position:relative}
+.tests-filters .search-wrap input{width:100%;padding:12px 14px 12px 44px;border-radius:8px;border:2px solid var(--gray-100);background:var(--bg);font-size:.875rem;outline:none;transition:border-color .2s;color:var(--fg)}
+.tests-filters .search-wrap input:focus{border-color:var(--primary)}
+.tests-filters .search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray-300);pointer-events:none}
+.tests-filters select{padding:12px 18px;border-radius:8px;border:2px solid var(--gray-100);background:var(--bg);font-size:.875rem;min-width:190px;outline:none;cursor:pointer;color:var(--fg)}
+.tests-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;max-width:1300px;margin:0 auto}
+.test-card{background:var(--bg);border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,0.04);border:1px solid var(--gray-100);display:flex;flex-direction:column;gap:12px;transition:all .2s}
+.test-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,0.08);border-color:var(--gray-300)}
+.test-card .top{display:flex;justify-content:space-between;align-items:flex-start}
+.test-card .cat-badge{display:inline-flex;padding:4px 12px;border-radius:99px;font-size:.68rem;font-weight:700;text-transform:uppercase}
+.test-card .icon-box{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;background:linear-gradient(135deg,hsla(174,100%,33%,0.1),hsla(197,100%,39%,0.1))}
+.test-card .cname{font-family:var(--font-display);font-size:1.125rem;font-weight:700;line-height:1.2}
+.test-card .desc{font-size:.875rem;color:var(--gray-500);line-height:1.5;flex:1}
+.test-card .bottom{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+.test-card .price{font-family:var(--font-display);font-size:1.25rem;font-weight:700;color:var(--primary)}
+.test-card .price small{font-size:.75rem;color:var(--gray-300);font-family:var(--font-body);font-weight:400}
+.book-btn{padding:8px 16px;border-radius:4px;color:var(--primary-fg);font-size:.75rem;font-weight:600;transition:all .2s;border:none}
+.book-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px hsla(174,100%,33%,0.35)}
 
-        /* Sticky header */
-        .sticky-top-set {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background: rgba(10,14,23,0.96);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
-        }
+.packages-section{padding:80px 5%}
+.packages-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;max-width:1300px;margin:0 auto}
+.pkg-card{background:var(--bg);border-radius:12px;border:2px solid var(--gray-100);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.04);transition:all .2s;position:relative}
+.pkg-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,0.08);border-color:var(--primary)}
+.pkg-card.popular{border-color:var(--primary)}
+.pkg-card .popular-ribbon{position:absolute;top:18px;right:-28px;background:var(--gold);color:var(--primary-fg);font-size:.68rem;font-weight:700;text-transform:uppercase;padding:4px 40px;transform:rotate(45deg);box-shadow:0 2px 8px hsla(38,90%,55%,0.4)}
+.pkg-header{padding:28px 28px 20px;border-bottom:1px solid var(--gray-100);background:linear-gradient(135deg,hsla(174,100%,33%,0.05),hsla(197,100%,39%,0.05))}
+.pkg-header .pname{font-family:var(--font-display);font-size:1.25rem;font-weight:700;margin-bottom:6px}
+.pkg-header .info{font-size:.875rem;color:var(--gray-500)}
+.pkg-tests{padding:24px}
+.pkg-tests .test-item{display:flex;align-items:center;gap:8px;font-size:.875rem;color:var(--gray-700);margin-bottom:8px}
+.pkg-tests .check{width:20px;height:20px;border-radius:50%;background:hsla(174,100%,33%,0.1);color:var(--primary);font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pkg-tests .more{font-size:.75rem;color:var(--primary);font-weight:600;margin-top:4px}
+.pkg-footer{display:flex;align-items:center;justify-content:space-between;padding:20px;border-top:1px solid var(--gray-100)}
+.pkg-footer .orig{font-size:.875rem;color:var(--gray-300);text-decoration:line-through}
+.pkg-footer .disc{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--primary);line-height:1}
+.pkg-footer .save{font-size:.75rem;color:var(--teal-light);font-weight:600;margin-top:2px}
 
-        /* Tab animation */
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeUp 0.3s ease; }
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(8px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
+.how-section{padding:80px 5%;background:var(--off-white)}
+.how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;max-width:1100px;margin:0 auto;position:relative}
+.how-grid .line{display:block;position:absolute;top:36px;left:12.5%;right:12.5%;height:2px;opacity:.25}
+.how-card{text-align:center;padding:32px;background:var(--bg);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.04);border:1px solid var(--gray-100);transition:all .2s}
+.how-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,0.08)}
+.how-card .num{width:60px;height:60px;border-radius:50%;color:var(--primary-fg);font-family:var(--font-display);font-size:1.25rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 8px 24px hsla(174,100%,33%,0.3)}
+.how-card .htitle{font-weight:700;margin-bottom:8px}.how-card .hdesc{font-size:.875rem;color:var(--gray-500);line-height:1.5}
+@media(max-width:768px){.how-grid{grid-template-columns:repeat(2,1fr)}.how-grid .line{display:none}}
+@media(max-width:480px){.how-grid{grid-template-columns:1fr}}
 
-        /* KPI cards */
-        .stat-card {
-            border: 1px solid var(--border);
-            background: var(--surface);
-            border-radius: 6px;
-            transition: border-color 0.2s, transform 0.15s;
-            position: relative;
-            overflow: hidden;
-        }
-        .stat-card::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 2px;
-            background: var(--accent);
-            transform: scaleX(0);
-            transition: transform 0.3s;
-        }
-        .stat-card:hover::after { transform: scaleX(1); }
-        .stat-card:hover { border-color: var(--accent); transform: translateY(-1px); }
-        .stat-card.negative::after { background: var(--loss); }
+.why-section{padding:80px 5%}
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;max-width:1200px;margin:0 auto}
+.why-feature{display:flex;gap:16px;padding:20px;border-radius:8px;border:1px solid var(--gray-100);background:var(--bg);transition:all .2s;margin-bottom:20px}
+.why-feature:hover{border-color:var(--primary)}
+.why-feature .icon-box{width:48px;height:48px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.25rem}
+.why-feature .wtitle{font-weight:700;font-size:.95rem;margin-bottom:4px}.why-feature .wdesc{font-size:.875rem;color:var(--gray-500);line-height:1.5}
+.why-panel{border-radius:12px;padding:36px;color:var(--primary-fg);position:relative;overflow:hidden}
+.why-panel .circle1{position:absolute;bottom:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:hsla(174,100%,33%,0.15)}
+.why-panel .circle2{position:absolute;top:-60px;left:-60px;width:250px;height:250px;border-radius:50%;background:hsla(197,100%,39%,0.1)}
+.why-panel .sub{font-size:.75rem;font-weight:600;color:var(--teal-light);text-transform:uppercase;letter-spacing:.15em;margin-bottom:12px}
+.why-panel h3{font-family:var(--font-display);font-size:1.5rem;font-weight:700;margin-bottom:6px}
+.why-panel .ptext{font-size:.875rem;color:rgba(255,255,255,0.6);margin-bottom:28px}
+.why-panel .wsgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;position:relative;z-index:1}
+.why-panel .stat-box{background:rgba(255,255,255,0.08);border-radius:8px;padding:16px}
+.why-panel .stat-box .snum{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--teal-light)}
+.why-panel .stat-box .slbl{font-size:.75rem;color:rgba(255,255,255,0.55);margin-top:4px}
+@media(max-width:1024px){.why-grid{grid-template-columns:1fr}.why-panel-wrap{display:none}}
 
-        /* Section headers */
-        .section-header {
-            background: linear-gradient(135deg, #0a1628 0%, #0f1f3a 100%);
-            border-left: 3px solid var(--accent);
-            color: var(--accent);
-            padding: 8px 16px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin: 24px 0 12px 0;
-            border-radius: 0 4px 4px 0;
-            font-size: 11px;
-            font-family: 'JetBrains Mono', monospace;
-        }
+.contact-section{padding:80px 5%;background:var(--off-white)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;max-width:1200px;margin:0 auto;align-items:start}
+.contact-card{display:flex;gap:16px;padding:20px;background:var(--bg);border-radius:8px;border:1px solid var(--gray-100);box-shadow:0 2px 8px rgba(0,0,0,0.04);margin-bottom:20px}
+.contact-card .icon-box{width:48px;height:48px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.25rem;background:linear-gradient(135deg,hsla(174,100%,33%,0.1),hsla(197,100%,39%,0.1))}
+.contact-card .clabel{font-size:.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.contact-card .cvalue{font-size:.875rem;font-weight:600}
+@media(max-width:768px){.contact-grid{grid-template-columns:1fr}}
 
-        /* Chart boxes */
-        .chart-box {
-            background: var(--surface);
-            padding: 16px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            transition: border-color 0.2s;
-        }
-        .chart-box:hover { border-color: rgba(0,229,160,0.3); }
-        .chart-box h3 {
-            font-size: 9px;
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--text-mid);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-        }
+footer{color:var(--primary-fg);padding:64px 5% 24px}
+footer .fgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;margin-bottom:40px}
+footer .col-title{font-weight:700;font-size:.875rem;text-transform:uppercase;letter-spacing:.15em;color:rgba(255,255,255,0.8);margin-bottom:16px}
+footer ul{list-style:none}footer ul li{margin-bottom:8px}footer ul a{font-size:.875rem;color:rgba(255,255,255,0.5);transition:color .2s}footer ul a:hover{color:var(--teal-light)}
+footer .fbottom{display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,0.08);padding-top:24px;font-size:.75rem;color:rgba(255,255,255,0.35);flex-wrap:wrap;gap:10px}
+footer .admin-btn{font-size:.75rem;color:rgba(255,255,255,0.25);background:transparent;padding:4px 8px;border:none;cursor:pointer}
+footer .admin-btn:hover{color:rgba(255,255,255,0.6)}
+@media(max-width:768px){footer .fgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){footer .fgrid{grid-template-columns:1fr}}
 
-        /* Analytics grid */
-        .analytics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 14px;
-        }
-
-        /* Table */
-        table { width: 100%; border-collapse: collapse; min-width: 860px; }
-        thead tr { background: var(--surface2); }
-        thead th {
-            padding: 12px 16px;
-            font-size: 9px;
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--text-dim);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            border-bottom: 1px solid var(--border);
-            white-space: nowrap;
-        }
-        tbody tr {
-            border-bottom: 1px solid var(--border);
-            transition: background 0.15s;
-        }
-        tbody tr:hover { background: var(--surface2); }
-
-        /* Form inputs */
-        input, select {
-            background: var(--surface2) !important;
-            border: 1px solid var(--border) !important;
-            color: var(--text) !important;
-            border-radius: 6px;
-            padding: 8px 10px;
-            font-size: 11px;
-            font-family: 'JetBrains Mono', monospace;
-            width: 100%;
-            outline: none !important;
-            transition: border-color 0.2s;
-        }
-        input:focus, select:focus {
-            border-color: var(--accent) !important;
-            box-shadow: 0 0 0 2px rgba(0,229,160,0.1);
-        }
-        input::placeholder { color: var(--text-dim) !important; }
-        select option { background: #0f1623; color: var(--text); }
-
-        label {
-            display: block;
-            font-size: 8px;
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--text-dim);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-
-        /* PnL preview */
-        .pnl-container {
-            background: linear-gradient(135deg, #0a2218 0%, #0d1f16 100%);
-            border: 1px solid rgba(0,229,160,0.3);
-            border-radius: 8px;
-            padding: 12px;
-        }
-        .pnl-container.loss-mode {
-            background: linear-gradient(135deg, #220a0a 0%, #1f0d0d 100%);
-            border-color: rgba(255,64,96,0.3);
-        }
-
-        /* Submit button */
-        .btn-commit {
-            width: 100%;
-            background: linear-gradient(135deg, #00e5a0 0%, #00c882 100%);
-            color: #0a0e17;
-            font-weight: 900;
-            padding: 12px;
-            border-radius: 8px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-size: 10px;
-            font-family: 'JetBrains Mono', monospace;
-            border: none;
-            cursor: pointer;
-            transition: opacity 0.2s, transform 0.1s;
-        }
-        .btn-commit:hover { opacity: 0.9; transform: translateY(-1px); }
-        .btn-commit:active { transform: translateY(0); }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
-        /* Badges */
-        .badge {
-            display: inline-block;
-            padding: 2px 7px;
-            border-radius: 3px;
-            font-size: 8px;
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .badge-buy  { background: rgba(0,229,160,0.15); color: var(--win); border: 1px solid rgba(0,229,160,0.3); }
-        .badge-sell { background: rgba(255,64,96,0.15);  color: var(--loss); border: 1px solid rgba(255,64,96,0.3); }
-        .badge-type { background: rgba(0,102,255,0.12); color: #60a5fa; border: 1px solid rgba(0,102,255,0.2); }
-
-        /* Toast notifications */
-        #toast {
-            position: fixed;
-            bottom: 24px; right: 24px;
-            z-index: 99999;
-            display: flex; flex-direction: column; gap: 8px;
-        }
-        .toast-item {
-            background: var(--surface2);
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 10px 16px;
-            border-radius: 6px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            animation: slideIn 0.3s ease, slideOut 0.3s ease 2.7s forwards;
-            display: flex; align-items: center; gap: 8px;
-        }
-        .toast-item.error { border-color: var(--loss); color: var(--loss); }
-        @keyframes slideIn { from { transform: translateX(40px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes slideOut { from { opacity: 1; } to { opacity: 0; pointer-events: none; } }
-
-        /* Tab buttons */
-        .tab-btn {
-            padding: 6px 18px;
-            border-radius: 6px;
-            font-weight: 800;
-            font-size: 10px;
-            font-family: 'JetBrains Mono', monospace;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--text-dim);
-            transition: all 0.2s;
-            cursor: pointer;
-            border: none;
-            background: transparent;
-        }
-        .tab-btn.active {
-            background: var(--accent);
-            color: #0a0e17;
-        }
-
-        /* Glow effect on pnl value */
-        .glow-green { text-shadow: 0 0 14px rgba(0,229,160,0.6); }
-        .glow-red   { text-shadow: 0 0 14px rgba(255,64,96,0.6); }
-
-        /* Edit modal */
-        #editModal {
-            display: none;
-            position: fixed; inset: 0;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(4px);
-            z-index: 9998;
-            align-items: center;
-            justify-content: center;
-        }
-        #editModal.open { display: flex; }
-        .modal-box {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
-            width: 420px;
-            max-width: 95vw;
-            max-height: 90vh;
-            overflow-y: auto;
-            animation: fadeUp 0.25s ease;
-        }
-
-        /* Heatmap */
-        .heatmap-cell {
-            width: 14px; height: 14px;
-            border-radius: 2px;
-            cursor: default;
-            transition: transform 0.1s;
-        }
-        .heatmap-cell:hover { transform: scale(1.4); z-index: 10; }
-
-        /* Import drag zone */
-        #importZone {
-            border: 2px dashed var(--border);
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: border-color 0.2s, background 0.2s;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 10px;
-            color: var(--text-dim);
-        }
-        #importZone:hover, #importZone.drag-over {
-            border-color: var(--accent);
-            background: rgba(0,229,160,0.04);
-            color: var(--accent);
-        }
-
-        /* Resize chart containers for responsive */
-        canvas { max-height: 240px; }
-
-        /* Header logo pulse */
-        @keyframes pulse-accent {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(0,229,160,0.4); }
-            50% { box-shadow: 0 0 0 6px rgba(0,229,160,0); }
-        }
-        .logo-icon { animation: pulse-accent 3s infinite; }
-
-        /* Filter bar */
-        #filter-bar select {
-            font-size: 9px !important;
-        }
-
-        /* Pagination */
-        .page-btn {
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 9px;
-            font-family: 'JetBrains Mono', monospace;
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            color: var(--text-mid);
-            cursor: pointer;
-            transition: all 0.15s;
-        }
-        .page-btn:hover, .page-btn.active-page { background: var(--accent); color: #0a0e17; border-color: var(--accent); }
-
-        /* Ticker symbol style */
-        .ticker-tag {
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 700;
-            font-size: 13px;
-            color: #60a5fa;
-        }
-
-        /* Chart.js global dark styles applied via JS */
-        .pnl-positive { color: var(--win) !important; }
-        .pnl-negative { color: var(--loss) !important; }
-
-        /* R/R pill */
-        .rr-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 3px;
-            padding: 2px 6px;
-            background: rgba(245,158,11,0.1);
-            border: 1px solid rgba(245,158,11,0.3);
-            border-radius: 10px;
-            font-size: 9px;
-            font-family: 'JetBrains Mono', monospace;
-            color: #f59e0b;
-        }
-    </style>
+.modal-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg);border-radius:12px;padding:36px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.18);animation:modal-in .3s cubic-bezier(.34,1.56,.64,1)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.modal-header h3{font-family:var(--font-display);font-size:1.5rem;font-weight:700}
+.modal-close{width:36px;height:36px;border-radius:50%;background:var(--gray-50);display:flex;align-items:center;justify-content:center;color:var(--gray-500);border:none;font-size:1.1rem;transition:all .2s}
+.modal-close:hover{background:var(--gray-100);color:var(--fg)}
+.form-group{margin-bottom:16px}.form-group label{display:block;font-size:.875rem;font-weight:600;margin-bottom:6px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 16px;border-radius:8px;border:2px solid var(--gray-100);background:var(--bg);font-size:.875rem;outline:none;transition:border-color .2s;color:var(--fg)}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--primary)}
+.form-group textarea{resize:vertical;min-height:90px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.btn-submit{width:100%;padding:14px;border-radius:8px;color:var(--primary-fg);font-size:.95rem;font-weight:700;box-shadow:0 6px 20px hsla(174,100%,33%,0.3);transition:all .2s;border:none;margin-top:4px}
+.btn-submit:hover{transform:translateY(-2px)}
+.admin-modal{max-width:900px}
+.admin-tabs{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap}
+.admin-tabs button{padding:8px 20px;border-radius:4px;font-size:.875rem;font-weight:600;border:none;transition:all .2s;background:var(--gray-50);color:var(--gray-500)}
+.admin-tabs button.active{color:var(--primary-fg)}
+.admin-table{width:100%;border-collapse:collapse}
+.admin-table th{background:var(--gray-50);padding:12px;text-align:left;font-size:.75rem;font-weight:700;text-transform:uppercase}
+.admin-table td{padding:12px;border-top:1px solid var(--gray-100);font-size:.875rem}
+.admin-table tr:hover{background:var(--gray-50)}
+.edit-btn,.del-btn{padding:4px 12px;border-radius:6px;font-size:.75rem;font-weight:600;border:none;cursor:pointer;transition:all .2s}
+.edit-btn{background:hsla(200,100%,39%,0.1);color:var(--secondary)}
+.del-btn{background:hsla(4,74%,55%,0.1);color:var(--destructive)}
+.table-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--gray-100)}
+</style>
 </head>
 <body>
 
-<!-- Toast container -->
-<div id="toast"></div>
+<nav class="navbar" id="navbar">
+  
+  <a href="#hero" class="nav-logo" style="display:flex; align-items:center; gap:10px;">
+    
+    <!-- Logo Image -->
+    <img src="Images/Lab Logo.jpeg" alt="Lumin Pathlab Logo"
+         style="width:42px; height:42px; border-radius:10px; object-fit:cover;">
 
-<!-- Edit modal -->
-<div id="editModal">
-    <div class="modal-box">
-        <div class="flex justify-between items-center mb-4">
-            <h3 style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;font-weight:700;">EDIT TRADE</h3>
-            <button onclick="closeEditModal()" style="color:var(--text-dim);font-size:18px;background:none;border:none;cursor:pointer;">&times;</button>
-        </div>
-        <div id="editFormContainer"></div>
+    <!-- Text -->
+    <div style="display:flex;flex-direction:column;line-height:1.2">
+      <strong class="gradient-text" 
+              style="font-family:var(--font-display);font-size:1.25rem">
+        Lumin Pathlab
+      </strong>
+      <span style="font-size:.65rem;color:var(--gray-500);letter-spacing:.15em;text-transform:uppercase">
+        Accurate Diagnostics
+      </span>
     </div>
+
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#tests">Tests</a></li>
+    <li><a href="#packages">Packages</a></li>
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+
+  <div style="display:flex;align-items:center;gap:10px">
+    <button class="nav-cta gradient-bg" onclick="openBooking()">📋 Book Test</button>
+    <button class="hamburger" onclick="toggleMobile()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+</nav>
+<div class="mobile-menu" id="mobileMenu"><a href="#hero" onclick="closeMobile()">Home</a><a href="#tests" onclick="closeMobile()">Tests</a><a href="#packages" onclick="closeMobile()">Packages</a><a href="#how-it-works" onclick="closeMobile()">How It Works</a><a href="#contact" onclick="closeMobile()">Contact</a><button onclick="openBooking();closeMobile()">📋 Book Test</button></div>
+
+<section class="hero" id="hero">
+  <div style="position:absolute;inset:0;pointer-events:none;opacity:.045;background-image:radial-gradient(circle at 20% 50%,var(--teal) 0%,transparent 50%),radial-gradient(circle at 80% 20%,var(--sky) 0%,transparent 50%),radial-gradient(circle at 60% 80%,var(--teal-light) 0%,transparent 40%)"></div>
+  <div class="hero-grid">
+    <div class="animate-fade-in-up">
+      <div class="hero-badge"><span class="animate-pulse-dot" style="width:8px;height:8px;border-radius:50%;background:var(--primary);display:inline-block"></span> NABL Accredited Laboratory</div>
+      <h1>Accurate Diagnostics,<br/><span class="gradient-text">Trusted Care</span></h1>
+      <p class="hero-desc">Your health matters. Lumin Pathlab delivers precise, affordable diagnostic services with fast reports, home sample collection, and compassionate care.</p>
+      <div class="hero-btns"><a href="#tests" class="btn-primary gradient-bg">🔬 View Tests</a><button class="btn-outline" onclick="openBooking()">📋 Book Now</button></div>
+      <div class="hero-stats"><div><div class="stat-num gradient-text">500+</div><div class="stat-label">Tests Available</div></div><div><div class="stat-num gradient-text">50K+</div><div class="stat-label">Happy Patients</div></div><div><div class="stat-num gradient-text">24hr</div><div class="stat-label">Report Delivery</div></div><div><div class="stat-num gradient-text">100%</div><div class="stat-label">Accurate Results</div></div></div>
+    </div>
+    <div class="hero-right animate-fade-in-up" style="animation-delay:.2s">
+      <div class="hero-card"><div class="top-bar gradient-bg"></div><div class="rated">⭐ Top Rated</div><div class="label">Popular Tests Today</div>
+        <div class="test-row"><div><div class="tname">Complete Blood Count</div><div class="tcat">Blood Test</div></div><div class="tprice">₹200</div></div>
+        <div class="test-row"><div><div class="tname">HbA1c (Diabetes)</div><div class="tcat">Diabetes</div></div><div class="tprice">₹500</div></div>
+        <div class="test-row"><div><div class="tname">Thyroid Panel (T3,T4,TSH)</div><div class="tcat">Thyroid</div></div><div class="tprice">₹600</div></div>
+        <div class="test-row"><div><div class="tname">Vitamin D3</div><div class="tcat">Vitamin</div></div><div class="tprice">₹1,500</div></div>
+      </div>
+      <div class="hero-float animate-float" style="bottom:20px;left:-32px;animation-delay:.5s"><div class="icon-box" style="background:hsla(174,100%,33%,0.1)">🏠</div><div><div style="font-size:.75rem;font-weight:600">Home Collection</div><div style="font-size:.68rem;color:var(--gray-500)">Available 7AM – 8PM</div></div></div>
+      <div class="hero-float animate-float" style="top:32px;right:-20px;animation-delay:1s"><div class="icon-box" style="background:hsla(200,100%,39%,0.1)">📄</div><div><div style="font-size:.75rem;font-weight:600">Digital Reports</div><div style="font-size:.68rem;color:var(--gray-500)">Within 24 hours</div></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="stats-bar gradient-bg-dark"><div class="sgrid"><div class="stat"><div class="num gradient-text">500+</div><div class="lbl">Diagnostic Tests</div></div><div class="stat"><div class="num gradient-text">50,000+</div><div class="lbl">Patients Served</div></div><div class="stat"><div class="num gradient-text">99.8%</div><div class="lbl">Accuracy Rate</div></div><div class="stat"><div class="num gradient-text">Developing</div><div class="lbl">Developing</div></div></div></div>
+
+<section class="tests-section" id="tests">
+  <div class="section-header"><div class="tag">🧪 Our Tests</div><h2>Comprehensive Diagnostic Tests</h2><p>From routine blood work to advanced diagnostics — all under one roof with precise, reliable results.</p></div>
+  <div class="tests-filters"><div class="search-wrap"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" placeholder="Search tests by name..." id="testSearch" oninput="renderTests()"/></div><select id="testCatFilter" onchange="renderTests()"><option value="">All Categories</option></select></div>
+  <div class="tests-grid" id="testsGrid"></div>
+</section>
+
+<section class="packages-section" id="packages">
+  <div class="section-header"><div class="tag">📦 Health Packages</div><h2>Group Test Packages</h2><p>Comprehensive health checkup packages at unbeatable prices. Save more, know more.</p></div>
+  <div class="packages-grid" id="packagesGrid"></div>
+</section>
+
+<section class="how-section" id="how-it-works">
+  <div class="section-header"><div class="tag">ℹ️ Process</div><h2>How It Works</h2><p>Book your test in minutes and get results delivered to your doorstep — hassle-free.</p></div>
+  <div class="how-grid"><div class="line gradient-bg"></div>
+    <div class="how-card"><div class="num gradient-bg">1</div><div class="htitle">Book Your Test</div><div class="hdesc">Choose from 500+ tests or health packages online, by phone, or walk in.</div></div>
+    <div class="how-card"><div class="num gradient-bg">2</div><div class="htitle">Sample Collection</div><div class="hdesc">Our trained phlebotomists collect your sample at home or at our centre.</div></div>
+    <div class="how-card"><div class="num gradient-bg">3</div><div class="htitle">Lab Analysis</div><div class="hdesc">Samples are processed in our NABL-accredited lab with cutting-edge equipment.</div></div>
+    <div class="how-card"><div class="num gradient-bg">4</div><div class="htitle">Get Your Report</div><div class="hdesc">Receive your detailed digital report within 24 hours via email, WhatsApp, or app.</div></div>
+  </div>
+</section>
+
+<section class="why-section" id="why-us">
+  <div class="section-header"><div class="tag">🏆 Why Us</div><h2>Why Choose Lumin Pathlab?</h2><p>We combine cutting-edge technology with compassionate care for your peace of mind.</p></div>
+  <div class="why-grid">
+    <div>
+      <div class="why-feature"><div class="icon-box" style="background:hsla(174,100%,33%,0.1)">🔬</div><div><div class="wtitle">NABL Accredited Lab</div><div class="wdesc">Our laboratory is NABL accredited, ensuring the highest standards of accuracy and quality control in every test.</div></div></div>
+      <div class="why-feature"><div class="icon-box" style="background:hsla(200,100%,39%,0.1)">⚡</div><div><div class="wtitle">Fast Report Delivery</div><div class="wdesc">Get your test reports digitally within 24 hours. Urgent reports available within 4–6 hours for critical tests.</div></div></div>
+      <div class="why-feature"><div class="icon-box" style="background:hsla(38,90%,55%,0.1)">🏠</div><div><div class="wtitle">Home Sample Collection</div><div class="wdesc">Trained phlebotomists come to your doorstep for sample collection, 7 days a week, 7AM to 8PM.</div></div></div>
+      <div class="why-feature"><div class="icon-box" style="background:hsla(271,50%,47%,0.1)">💰</div><div><div class="wtitle">Affordable Pricing</div><div class="wdesc">Transparent, competitive pricing with no hidden charges. EMI and insurance-friendly billing available.</div></div></div>
+    </div>
+    <div class="why-panel-wrap"><div class="why-panel gradient-bg-dark"><div class="circle1"></div><div class="circle2"></div><div class="sub">Our Commitment</div><h3>Quality You Can Trust</h3><div class="ptext">Every test, every patient, every time — precision and care define us.</div>
+      <div class="wsgrid"><div class="stat-box"><div class="snum">99.8%</div><div class="slbl">Accuracy Rate</div></div><div class="stat-box"><div class="snum">500+</div><div class="slbl">Tests Offered</div></div><div class="stat-box"><div class="snum"></div><div class="slbl">Happy Patients</div></div><div class="stat-box"><div class="snum"></div><div class="slbl">Years of Trust</div></div></div>
+    </div></div>
+  </div>
+</section>
+
+<section class="contact-section" id="contact">
+  <div class="section-header"><div class="tag">📍 Contact</div><h2>Get In Touch</h2><p>We're here to help. Reach out for appointments, queries, or reports.</p></div>
+  <div class="contact-grid" id="contactGrid"></div>
+</section>
+
+<footer class="gradient-bg-dark">
+  <div class="fgrid">
+    <div><div class="gradient-text" style="font-family:var(--font-display);font-size:1.25rem;font-weight:700;margin-bottom:10px">Lumin Pathlab</div><p style="font-size:.875rem;color:rgba(255,255,255,0.5);line-height:1.5;max-width:280px">Accurate Diagnostics, Trusted Care. Your health is our mission. NABL accredited diagnostics for over 15 years.</p></div>
+    <div><div class="col-title">Quick Links</div><ul><li><a href="#hero">Home</a></li><li><a href="#tests">All Tests</a></li><li><a href="#packages">Packages</a></li><li><a href="#how-it-works">How It Works</a></li><li><a href="#contact">Contact Us</a></li></ul></div>
+    <div><div class="col-title">Tests</div><ul><li><a href="#tests">Blood Tests</a></li><li><a href="#tests">Thyroid Panel</a></li><li><a href="#tests">Diabetes Tests</a></li><li><a href="#tests">Cardiac Panel</a></li><li><a href="#tests">Vitamin Tests</a></li></ul></div>
+    <div><div class="col-title">Legal</div><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Refund Policy</a></li><li><a href="#">NABL Certificate</a></li></ul></div>
+  </div>
+  <div class="fbottom"><span>© 2025 Lumin Pathlab. All rights reserved.</span><button class="admin-btn" onclick="openAdmin()">⚙ Admin</button></div>
+</footer>
+
+<div class="modal-overlay" id="bookingModal" onclick="if(event.target===this)closeBooking()">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-header"><h3>📋 Book a Test</h3><button class="modal-close" onclick="closeBooking()">✕</button></div>
+    <div class="form-group"><label>Full Name *</label><input id="bName" placeholder="Enter your full name"/></div>
+    <div class="form-row"><div class="form-group"><label>Phone *</label><input id="bPhone" type="tel" placeholder="+91 98765 43210"/></div><div class="form-group"><label>Age</label><input id="bAge" type="number" placeholder="Age"/></div></div>
+    <div class="form-group"><label>Email</label><input id="bEmail" type="email" placeholder="email@example.com"/></div>
+    <div class="form-group"><label>Test / Package</label><select id="bTest" onchange="document.getElementById('customTestGroup').style.display=this.value==='__custom__'?'block':'none'"></select></div>
+    <div class="form-group" id="customTestGroup" style="display:none"><label>Specify Test Name *</label><input id="bCustomTest" placeholder="Type the test or service name..."/></div>
+    <div class="form-row"><div class="form-group"><label>Preferred Date *</label><input id="bDate" type="date"/></div><div class="form-group"><label>Time Slot</label><select id="bSlot"><option>07:00 AM – 09:00 AM</option><option>09:00 AM – 11:00 AM</option><option>11:00 AM – 01:00 PM</option><option>02:00 PM – 04:00 PM</option><option>04:00 PM – 06:00 PM</option><option>06:00 PM – 08:00 PM</option></select></div></div>
+    <div class="form-group"><label>Collection Type</label><select id="bCollection" onchange="document.getElementById('addressGroup').style.display=this.value==='Home Collection'?'block':'none'"><option>Home Collection</option><option>Walk-in at Centre</option></select></div>
+    <div class="form-group" id="addressGroup"><label>Address (for home collection)</label><textarea id="bAddress" placeholder="Enter your full address..."></textarea></div>
+    <button class="btn-submit gradient-bg" onclick="submitBooking()">✅ Confirm Booking via WhatsApp</button>
+  </div>
 </div>
 
-<!-- Sticky Top -->
-<div class="sticky-top-set">
-    <header style="background:rgba(15,22,35,0.98);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);">
-        <div style="display:flex;align-items:center;gap:10px;">
-            <div class="logo-icon" style="background:var(--accent);padding:7px 9px;border-radius:6px;color:#0a0e17;font-size:11px;"><i class="fas fa-bolt"></i></div>
-            <div>
-                <h1 style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;letter-spacing:-0.5px;text-transform:uppercase;font-style:italic;color:var(--text);line-height:1;">APEX<span style="color:var(--accent);">TERMINAL</span></h1>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text-dim);letter-spacing:2px;">v4.0 · ELITE EDITION</div>
-            </div>
-        </div>
-
-        <nav style="display:flex;background:var(--surface2);padding:4px;border-radius:8px;border:1px solid var(--border);gap:2px;">
-            <button onclick="switchTab('journal')" id="btn-journal" class="tab-btn active">Journal</button>
-            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="tab-btn">Dashboard</button>
-            <button onclick="switchTab('heatmap')" id="btn-heatmap" class="tab-btn">Heatmap</button>
-            <button onclick="switchTab('notes')" id="btn-notes" class="tab-btn">Notes</button>
-        </nav>
-
-        <div style="display:flex;gap:8px;align-items:center;">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);" id="clockDisplay"></div>
-            <button onclick="exportExcel()" style="background:var(--surface2);color:var(--text);border:1px solid var(--border);padding:6px 12px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">EXPORT</button>
-            <button onclick="triggerImport()" style="background:var(--surface2);color:var(--accent);border:1px solid rgba(0,229,160,0.3);padding:6px 12px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;cursor:pointer;letter-spacing:1px;" title="Import CSV/JSON">IMPORT</button>
-            <button onclick="clearData()" style="background:rgba(255,64,96,0.08);color:var(--loss);border:1px solid rgba(255,64,96,0.2);padding:6px 12px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;cursor:pointer;letter-spacing:1px;">WIPE</button>
-            <input type="file" id="importFileInput" accept=".json,.csv" style="display:none" onchange="importData(this)">
-        </div>
-    </header>
-
-    <!-- KPI Bar -->
-    <div class="max-w-[1600px] mx-auto px-6 py-2 grid grid-cols-4 md:grid-cols-6 lg:grid-cols-12 gap-2" id="kpi-bar"></div>
-
-    <!-- Dashboard Filter Bar -->
-    <div id="filter-bar" class="hidden max-w-[1600px] mx-auto px-6 py-2 border-t" style="border-color:var(--border);background:rgba(15,22,35,0.8);display:none;">
-        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;align-items:center;">
-            <select id="fYear" onchange="renderDashboard()">
-                <option value="All">All Years</option>
-            </select>
-            <select id="fMonth" onchange="renderDashboard()">
-                <option value="All">All Months</option>
-            </select>
-            <select id="fType" onchange="renderDashboard()">
-                <option value="All">All Types</option>
-            </select>
-            <select id="fSide" onchange="renderDashboard()">
-                <option value="All">Long/Short</option>
-                <option value="BUY">LONG</option>
-                <option value="SELL">SHORT</option>
-            </select>
-            <select id="fRules" onchange="renderDashboard()">
-                <option value="All">All Discipline</option>
-                <option value="Yes">Followed Rules</option>
-                <option value="No">Broke Rules</option>
-            </select>
-            <button onclick="resetDashboardFilters()" style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:var(--accent);background:none;border:none;cursor:pointer;letter-spacing:1px;text-transform:uppercase;">↺ RESET</button>
-        </div>
-    </div>
+<div class="modal-overlay" id="adminModal" onclick="if(event.target===this)closeAdmin()">
+  <div class="modal admin-modal" id="adminContent"></div>
 </div>
-
-<!-- Main Content -->
-<main class="max-w-[1600px] mx-auto px-6 py-6" style="position:relative;z-index:1;">
-
-    <!-- ===== JOURNAL TAB ===== -->
-    <section id="view-journal" class="tab-content active">
-        <div style="display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start;">
-
-            <!-- Form Panel -->
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;position:sticky;top:100px;">
-                <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
-                    <div style="width:3px;height:16px;background:var(--accent);border-radius:2px;"></div>
-                    <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;">NEW TRADE ENTRY</span>
-                </div>
-
-                <form id="tradeForm" onsubmit="saveTrade(event)" style="display:flex;flex-direction:column;gap:10px;">
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                        <div><label>Date</label><input type="date" id="date" required></div>
-                        <div><label>Ticker</label><input type="text" id="ticker" required placeholder="SYMBOL" style="text-transform:uppercase;font-weight:700;"></div>
-                    </div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                        <div><label>Type</label><select id="tradeType" onchange="handleTypeChange(this)"></select></div>
-                        <div><label>Side</label><select id="side" onchange="autoCalc()"><option value="BUY">LONG</option><option value="SELL">SHORT</option></select></div>
-                    </div>
-                    <div id="options-field" style="display:none;">
-                        <label style="color:var(--accent);">Strategy</label>
-                        <select id="strategy" onchange="handleStrategyChange(this)" style="background:rgba(0,229,160,0.05)!important;border-color:rgba(0,229,160,0.3)!important;"></select>
-                    </div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-                        <div><label>Qty</label><input type="number" id="qty" oninput="autoCalc()" required min="0.001" step="any"></div>
-                        <div><label>Entry $</label><input type="number" id="entryPrice" step="any" oninput="autoCalc()" required></div>
-                        <div><label>Exit $</label><input type="number" id="exitPrice" step="any" oninput="autoCalc()" required></div>
-                    </div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                        <div><label>Timeframe</label>
-                            <select id="timeframe">
-                                <option>1 MIN</option><option>5 MIN</option><option>15 MIN</option><option>30 MIN</option><option>1 HR</option><option>4 HR</option><option>DAILY</option><option>WEEKLY</option>
-                            </select>
-                        </div>
-                        <div><label>Confidence</label>
-                            <select id="confidence">
-                                <option>LOW</option><option>AVG</option><option>HIGH</option><option>VERY HIGH</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                        <div><label>Capital $</label><input type="number" id="capital" value="5000" min="1"></div>
-                        <div><label>Fees $</label><input type="number" id="brokerage" value="0" oninput="autoCalc()" min="0" step="any" style="color:var(--loss)!important;"></div>
-                    </div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                        <div><label>Stop Loss $</label><input type="number" id="stopLoss" step="any" oninput="autoCalc()" placeholder="Optional"></div>
-                        <div><label>Target $</label><input type="number" id="targetPrice" step="any" oninput="autoCalc()" placeholder="Optional"></div>
-                    </div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                        <div><label>Entry Reason</label>
-                            <select id="entryReason">
-                                <option>Perfect Entry</option><option>Good Setup</option><option>Late Entry</option><option>FOMO</option><option>Breakout</option><option>Pullback</option>
-                            </select>
-                        </div>
-                        <div><label>Exit Reason</label>
-                            <select id="exitReason">
-                                <option>Target Hit</option><option>TSL Hit</option><option>Early Exit</option><option>Fear</option><option>Greed</option><option>SL Hit</option><option>EOD</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-                        <div><label>R/R</label><input type="number" id="rr" step="0.01" value="1.0" min="0"></div>
-                        <div><label>Rules</label><select id="followedRules"><option value="Yes">YES ✓</option><option value="No">NO ✗</option></select></div>
-                        <div><label>Psychology</label>
-                            <select id="emotion">
-                                <option>Calm</option><option>Greed</option><option>FOMO</option><option>Fear</option><option>Revenge</option><option>Confident</option><option>Anxious</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div><label>Notes (optional)</label><input type="text" id="notes" placeholder="Trade notes..."></div>
-
-                    <!-- PnL Preview -->
-                    <div class="pnl-container" id="pnlPreviewBox">
-                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <div>
-                                <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px;">PROJECTED NET P&L</div>
-                                <div id="prev-pnl" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--win);">$0.00</div>
-                            </div>
-                            <div style="text-align:right;">
-                                <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text-dim);margin-bottom:2px;">GROSS / PCT</div>
-                                <div id="prev-gross" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-mid);">$0.00 · 0.00%</div>
-                            </div>
-                        </div>
-                        <div id="rr-auto" style="margin-top:6px;"></div>
-                    </div>
-
-                    <button type="submit" class="btn-commit">⚡ COMMIT TRADE</button>
-                </form>
-            </div>
-
-            <!-- Table Panel -->
-            <div>
-                <!-- Search + pagination controls -->
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:12px;flex-wrap:wrap;">
-                    <div style="display:flex;gap:8px;align-items:center;flex:1;min-width:200px;">
-                        <input type="text" id="searchBar" placeholder="Search ticker, type, strategy..." oninput="renderTable()" style="max-width:280px;">
-                        <select id="sortCol" onchange="renderTable()" style="max-width:150px;font-size:9px;">
-                            <option value="date_desc">Date ↓</option>
-                            <option value="date_asc">Date ↑</option>
-                            <option value="pnl_desc">P&L ↓</option>
-                            <option value="pnl_asc">P&L ↑</option>
-                            <option value="ticker">Ticker A-Z</option>
-                        </select>
-                    </div>
-                    <div style="display:flex;gap:6px;align-items:center;" id="paginationControls"></div>
-                </div>
-
-                <div style="background:var(--surface);border-radius:12px;border:1px solid var(--border);overflow:hidden;overflow-x:auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Date / Ticker</th>
-                                <th>Type / Strategy</th>
-                                <th>Side</th>
-                                <th>Qty</th>
-                                <th>Entry</th>
-                                <th>Exit</th>
-                                <th>R/R</th>
-                                <th>Gross P&L</th>
-                                <th>Net P&L</th>
-                                <th>%</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody"></tbody>
-                    </table>
-                </div>
-                <div id="tableFooter" style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);padding:8px 4px;"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== DASHBOARD TAB ===== -->
-    <section id="view-dashboard" class="tab-content">
-        <div class="section-header">▸ PERFORMANCE OVERVIEW</div>
-        <div class="analytics-grid">
-            <div class="chart-box"><h3>Daily P&amp;L</h3><canvas id="chartDailyPnl"></canvas></div>
-            <div class="chart-box"><h3>Strategy P&amp;L</h3><canvas id="chartStrategyPnl"></canvas></div>
-            <div class="chart-box"><h3>Confidence vs P&amp;L</h3><canvas id="chartConfidencePnl"></canvas></div>
-        </div>
-
-        <div class="section-header">▸ ACCOUNT CURVE & DISTRIBUTION</div>
-        <div class="analytics-grid">
-            <div class="chart-box"><h3>Cumulative Growth</h3><canvas id="chartCumulative"></canvas></div>
-            <div class="chart-box"><h3>Long vs Short</h3><canvas id="chartSidePnl"></canvas></div>
-            <div class="chart-box"><h3>Psychology Impact</h3><canvas id="chartPsychPnl"></canvas></div>
-        </div>
-
-        <div class="section-header">▸ EXECUTION QUALITY</div>
-        <div class="analytics-grid">
-            <div class="chart-box"><h3>Entry Reason P&amp;L</h3><canvas id="chartEntryReason"></canvas></div>
-            <div class="chart-box"><h3>Exit Reason P&amp;L</h3><canvas id="chartExitReason"></canvas></div>
-            <div class="chart-box"><h3>Weekday Distribution</h3><canvas id="chartWeekday"></canvas></div>
-        </div>
-
-        <div class="section-header">▸ RISK & TIMEFRAME</div>
-        <div class="analytics-grid">
-            <div class="chart-box" style="grid-column:span 2;"><h3>Day-wise Risk Reward Ratio</h3><canvas id="chartDayRR"></canvas></div>
-            <div class="chart-box"><h3>Timeframe Analytics</h3><canvas id="chartTimeframe"></canvas></div>
-        </div>
-
-        <div class="section-header">▸ WIN/LOSS ANALYSIS</div>
-        <div class="analytics-grid">
-            <div class="chart-box"><h3>P&amp;L Distribution (Histogram)</h3><canvas id="chartHistogram"></canvas></div>
-            <div class="chart-box"><h3>Trade Type Breakdown</h3><canvas id="chartTypePnl"></canvas></div>
-            <div class="chart-box"><h3>Rules Discipline Impact</h3><canvas id="chartRules"></canvas></div>
-        </div>
-    </section>
-
-    <!-- ===== HEATMAP TAB ===== -->
-    <section id="view-heatmap" class="tab-content">
-        <div class="section-header">▸ CALENDAR P&L HEATMAP</div>
-        <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
-            <select id="heatYear" onchange="renderHeatmap()" style="max-width:120px;"></select>
-            <div style="display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);">
-                <span style="width:10px;height:10px;background:#1a4a2e;border-radius:2px;display:inline-block;"></span> Small gain
-                <span style="width:10px;height:10px;background:#00e5a0;border-radius:2px;display:inline-block;margin-left:8px;"></span> Big gain
-                <span style="width:10px;height:10px;background:#ff4060;border-radius:2px;display:inline-block;margin-left:8px;"></span> Loss
-                <span style="width:10px;height:10px;background:var(--border);border-radius:2px;display:inline-block;margin-left:8px;"></span> No trade
-            </div>
-        </div>
-        <div id="heatmapContainer" style="overflow-x:auto;"></div>
-        <div style="margin-top:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;" id="heatmapStats"></div>
-    </section>
-
-    <!-- ===== NOTES TAB ===== -->
-    <section id="view-notes" class="tab-content">
-        <div class="section-header">▸ TRADING PLAYBOOK & NOTES</div>
-        <div style="display:grid;grid-template-columns:280px 1fr;gap:20px;">
-            <div>
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                    <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:1px;">NOTES</span>
-                    <button onclick="addNote()" style="background:var(--accent);color:#0a0e17;border:none;border-radius:4px;padding:4px 10px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;cursor:pointer;letter-spacing:1px;">+ NEW</button>
-                </div>
-                <div id="notesList" style="display:flex;flex-direction:column;gap:6px;"></div>
-            </div>
-            <div id="noteEditor" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;display:none;">
-                <input type="text" id="noteTitle" placeholder="Note title..." style="font-size:16px;font-weight:700;margin-bottom:12px;border:none!important;background:transparent!important;padding:0!important;color:var(--text)!important;">
-                <textarea id="noteContent" placeholder="Write your notes, rules, or strategies here..." style="width:100%;min-height:400px;background:transparent;border:none;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:12px;resize:vertical;outline:none;line-height:1.8;"></textarea>
-                <div style="display:flex;gap:8px;margin-top:12px;">
-                    <button onclick="saveNote()" class="btn-commit" style="flex:1;padding:8px;">SAVE NOTE</button>
-                    <button onclick="deleteNote()" style="background:rgba(255,64,96,0.1);color:var(--loss);border:1px solid rgba(255,64,96,0.3);border-radius:6px;padding:8px 16px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;cursor:pointer;letter-spacing:1px;">DELETE</button>
-                </div>
-            </div>
-            <div id="noteEmpty" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:40px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:var(--text-dim);">
-                <i class="fas fa-book-open" style="font-size:32px;opacity:0.3;"></i>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;">SELECT OR CREATE A NOTE</span>
-            </div>
-        </div>
-    </section>
-
-</main>
 
 <script>
-// ============================================================
-// STATE
-// ============================================================
-let trades = JSON.parse(localStorage.getItem('apex_v4')) || [];
-let config = JSON.parse(localStorage.getItem('apex_cfg_v4')) || {
-    types: ['Equity','Options','Futures','Crypto','Forex'],
-    strats: ['Naked','Credit Spread','Debit Spread','Iron Condor','Butterfly','Straddle','Strangle']
-};
-let notes = JSON.parse(localStorage.getItem('apex_notes_v4')) || [];
-let chartInstances = {};
-let currentPage = 1;
-const PAGE_SIZE = 20;
-let editingNoteId = null;
-let editingTradeId = null;
+var WHATSAPP_NUMBER='917304282272';
+var TESTS_KEY='luminPathlab_tests',PACKAGES_KEY='luminPathlab_packages',CONTACT_KEY='luminPathlab_contact';
+var catClassMap={'Blood Test':'cat-blood','Full Body Checkup':'cat-full','Hormone':'cat-hormone','Thyroid':'cat-thyroid','Diabetes':'cat-diabetes','Cardiac':'cat-cardiac','Liver':'cat-liver','Kidney':'cat-kidney','Vitamin':'cat-vitamin','Other':'cat-other'};
+var catIconMap={'Blood Test':'🩸','Full Body Checkup':'🏥','Hormone':'⚗️','Thyroid':'🦋','Diabetes':'💉','Cardiac':'❤️','Liver':'🫀','Kidney':'🫘','Vitamin':'🌟','Other':'🔬'};
+var categories=['Blood Test','Full Body Checkup','Hormone','Thyroid','Diabetes','Cardiac','Liver','Kidney','Vitamin','Other'];
+var defaultContact={address:'123, Health Avenue, Medical District<br/>Your City – 400001',phone:'+91 98765 43210',email:'info@luminpathlab.com',hours:'Mon–Sat: 7:00 AM – 9:00 PM<br/>Sun: 7:00 AM – 2:00 PM',mapUrl:''};
+const defaultTests=[{"id":"h1","name":"Complete Blood Count (CBC)","price":200,"category":"Blood Test","desc":"Comprehensive blood panel measuring RBC, WBC, haemoglobin and platelets.","icon":"🩸"},{"id":"h2","name":"Blood Group","price":100,"category":"Blood Test","desc":"ABO and Rh blood group determination.","icon":"🩸"},{"id":"h3","name":"Hemoglobin","price":100,"category":"Blood Test","desc":"Measures haemoglobin concentration; used to diagnose anaemia.","icon":"🩸"},{"id":"h4","name":"Total Leucocytes Count (TLC)","price":100,"category":"Blood Test","desc":"Total white blood cell count to detect infection or immune disorders.","icon":"🩸"},{"id":"h5","name":"Differential Leucocyte Count (DLC)","price":100,"category":"Blood Test","desc":"Differential count of five types of white blood cells.","icon":"🩸"},{"id":"h6","name":"ESR (Wintrobe's Method)","price":100,"category":"Blood Test","desc":"Erythrocyte sedimentation rate – inflammation marker.","icon":"🩸"},{"id":"h7","name":"ESR (Westergren's Method)","price":100,"category":"Blood Test","desc":"Standard international method for ESR measurement.","icon":"🩸"},{"id":"h8","name":"RBC Count","price":100,"category":"Blood Test","desc":"Red blood cell count for anaemia and polycythaemia assessment.","icon":"🩸"},{"id":"h9","name":"Packed Cell Volume (Haematocrit)","price":100,"category":"Blood Test","desc":"Percentage of blood volume occupied by red cells.","icon":"🩸"},{"id":"h10","name":"MCV","price":100,"category":"Blood Test","desc":"Mean corpuscular volume – helps classify type of anaemia.","icon":"🩸"},{"id":"h11","name":"MCH","price":100,"category":"Blood Test","desc":"Mean corpuscular haemoglobin – average haemoglobin per RBC.","icon":"🩸"},{"id":"h12","name":"MCHC","price":100,"category":"Blood Test","desc":"Mean corpuscular haemoglobin concentration.","icon":"🩸"},{"id":"h13","name":"Platelets Count","price":150,"category":"Blood Test","desc":"Platelet count for bleeding and clotting disorders.","icon":"🩸"},{"id":"h14","name":"Reticulocyte Count","price":500,"category":"Blood Test","desc":"Immature red cell count indicating bone marrow activity.","icon":"🩸"},{"id":"h15","name":"Absolute Eosinophil Count","price":300,"category":"Blood Test","desc":"Absolute eosinophil count for allergy and parasitic infection screening.","icon":"🩸"},{"id":"h16","name":"Malarial Parasite","price":100,"category":"Blood Test","desc":"Microscopic examination of blood for malaria parasite detection.","icon":"🩸"},{"id":"h17","name":"Peripheral Blood Smear","price":150,"category":"Blood Test","desc":"Microscopic review of blood film for morphological abnormalities.","icon":"🩸"},{"id":"h18","name":"Glycosylated Hemoglobin (HbA1c)","price":500,"category":"Diabetes","desc":"3-month average blood glucose – primary marker for diabetes control.","icon":"💉"},{"id":"h19","name":"Rapid Malaria Test","price":400,"category":"Blood Test","desc":"Rapid antigen test for quick malaria detection.","icon":"🩸"},{"id":"h20","name":"Bleeding Time","price":200,"category":"Blood Test","desc":"Time for bleeding to stop after a standardised skin puncture.","icon":"🩸"},{"id":"h21","name":"Clotting Time","price":200,"category":"Blood Test","desc":"Time taken for blood to clot; screening test for coagulation.","icon":"🩸"},{"id":"h22","name":"PT (Prothrombin Time)","price":500,"category":"Blood Test","desc":"Prothrombin time to assess extrinsic coagulation pathway.","icon":"🩸"},{"id":"h23","name":"APTT","price":600,"category":"Blood Test","desc":"Activated partial thromboplastin time – intrinsic pathway screening.","icon":"🩸"},{"id":"s1","name":"HIV I and II Antibodies","price":500,"category":"Other","desc":"Screening test for HIV 1 and 2 antibodies.","icon":"🔬"},{"id":"s2","name":"Hepatitis B Surface Antigen (HBsAg)","price":300,"category":"Other","desc":"Detects Hepatitis B surface antigen for infection screening.","icon":"🔬"},{"id":"s3","name":"HCV Antibodies","price":600,"category":"Other","desc":"Hepatitis C virus antibody detection.","icon":"🔬"},{"id":"s4","name":"VDRL","price":300,"category":"Other","desc":"Venereal Disease Research Laboratory test for syphilis.","icon":"🔬"},{"id":"s5","name":"Rheumatoid Factor (RA Factor)","price":350,"category":"Other","desc":"Detects rheumatoid factor for arthritis diagnosis.","icon":"🔬"},{"id":"s6","name":"CRP – C-Reactive Protein (Quantitative)","price":500,"category":"Cardiac","desc":"Quantitative CRP – sensitive marker of inflammation and cardiac risk.","icon":"❤️"},{"id":"s7","name":"ASO Titre","price":400,"category":"Other","desc":"Anti-streptolysin O titre for streptococcal infection detection.","icon":"🔬"},{"id":"s8","name":"Dengue NS1 + IgG / IgM","price":1200,"category":"Other","desc":"Comprehensive dengue panel including antigen and antibody tests.","icon":"🔬"},{"id":"s9","name":"NS1 (Dengue)","price":600,"category":"Other","desc":"Dengue NS1 antigen rapid test for early infection detection.","icon":"🔬"},{"id":"s10","name":"Dengue IgG / IgM","price":700,"category":"Other","desc":"Dengue antibody test for recent or past infection.","icon":"🔬"},{"id":"s11","name":"Widal","price":250,"category":"Other","desc":"Widal agglutination test for typhoid diagnosis.","icon":"🔬"},{"id":"s12","name":"Urine Pregnancy Test","price":300,"category":"Hormone","desc":"Detects hCG hormone in urine to confirm pregnancy.","icon":"⚗️"},{"id":"s13","name":"Mantoux Test","price":400,"category":"Other","desc":"Tuberculin skin test for TB exposure and immunity.","icon":"🔬"},{"id":"s14","name":"Weilfelix Test","price":900,"category":"Other","desc":"Agglutination test for rickettsial infections (typhus group).","icon":"🔬"},{"id":"s15","name":"Typhi Dot IgM","price":700,"category":"Other","desc":"Rapid IgM antibody detection for acute typhoid.","icon":"🔬"},{"id":"s16","name":"Chikungunya IgG / IgM","price":1000,"category":"Other","desc":"Antibody test for Chikungunya virus infection.","icon":"🔬"},{"id":"s17","name":"Chikungunya IgM","price":600,"category":"Other","desc":"IgM specific Chikungunya antibody for acute infection.","icon":"🔬"},{"id":"c1","name":"Urine Routine & Microscopy","price":100,"category":"Other","desc":"Complete urine analysis for UTI, kidney disease and diabetes.","icon":"🔬"},{"id":"c2","name":"Stool Routine","price":200,"category":"Other","desc":"Microscopic and chemical examination of stool sample.","icon":"🔬"},{"id":"c3","name":"Semen Analysis","price":500,"category":"Hormone","desc":"Comprehensive semen analysis for male fertility assessment.","icon":"⚗️"},{"id":"c4","name":"Urine Drug Abuse Panel","price":2000,"category":"Other","desc":"Multi-drug urine screening panel for substance abuse detection.","icon":"🔬"},{"id":"b1","name":"BUN (Blood Urea Nitrogen)","price":150,"category":"Kidney","desc":"Blood urea nitrogen – indicator of kidney filtration.","icon":"🫘"},{"id":"b2","name":"Plasma Glucose – Fasting","price":60,"category":"Diabetes","desc":"Fasting blood glucose level for diabetes screening.","icon":"💉"},{"id":"b3","name":"Plasma Glucose – Post-Prandial","price":60,"category":"Diabetes","desc":"Post-meal blood glucose – 2 hours after eating.","icon":"💉"},{"id":"b4","name":"Blood Sugar – Random","price":60,"category":"Diabetes","desc":"Random blood glucose test at any time of day.","icon":"💉"},{"id":"b5","name":"Serum Urea","price":200,"category":"Kidney","desc":"Measures blood urea levels for kidney function assessment.","icon":"🫘"},{"id":"b6","name":"Serum Creatinine","price":200,"category":"Kidney","desc":"Key marker of kidney filtration rate and renal health.","icon":"🫘"},{"id":"b7","name":"Glucose Tolerance Test – 3 Samples","price":400,"category":"Diabetes","desc":"GTT with 3 samples to diagnose gestational or type 2 diabetes.","icon":"💉"},{"id":"b8","name":"Serum Proteins","price":200,"category":"Liver","desc":"Total serum protein and albumin/globulin ratio.","icon":"🫀"},{"id":"b9","name":"Liver Function Test (LFT)","price":600,"category":"Liver","desc":"Complete liver panel – enzymes, bilirubin, proteins.","icon":"🫀"},{"id":"b10","name":"Serum Uric Acid","price":200,"category":"Other","desc":"Uric acid level – used to diagnose gout and kidney stones.","icon":"🔬"},{"id":"b11","name":"Lipid Profile","price":650,"category":"Cardiac","desc":"Full cholesterol panel – LDL, HDL, triglycerides for cardiac risk.","icon":"❤️"},{"id":"b12","name":"Serum Electrolytes","price":500,"category":"Other","desc":"Sodium, potassium, chloride and bicarbonate levels.","icon":"🔬"},{"id":"b13","name":"Serum Calcium","price":200,"category":"Vitamin","desc":"Calcium level for bone health, parathyroid and kidney evaluation.","icon":"🌟"},{"id":"b14","name":"Serum Phosphorus","price":200,"category":"Vitamin","desc":"Phosphorus level related to bone metabolism and kidney function.","icon":"🌟"},{"id":"b15","name":"Serum Potassium","price":200,"category":"Other","desc":"Potassium electrolyte level for heart and muscle function.","icon":"🔬"},{"id":"b16","name":"Serum Lithium","price":900,"category":"Other","desc":"Lithium drug level monitoring for bipolar disorder treatment.","icon":"🔬"},{"id":"b17","name":"Serum Bilirubin","price":200,"category":"Liver","desc":"Total, direct and indirect bilirubin for jaundice diagnosis.","icon":"🫀"},{"id":"b18","name":"Serum Alkaline Phosphatase (ALP)","price":200,"category":"Liver","desc":"Liver and bone enzyme – elevated in liver and bone disease.","icon":"🫀"},{"id":"b19","name":"Serum Acid Phosphatase","price":500,"category":"Other","desc":"Acid phosphatase – used in prostate disease assessment.","icon":"🔬"},{"id":"b20","name":"SGPT (ALT)","price":200,"category":"Liver","desc":"Alanine aminotransferase – primary liver damage enzyme marker.","icon":"🫀"},{"id":"b21","name":"SGOT (AST)","price":200,"category":"Liver","desc":"Aspartate aminotransferase – liver and cardiac damage marker.","icon":"🫀"},{"id":"b22","name":"Glucose Tolerance Test – 5 Samples","price":500,"category":"Diabetes","desc":"Extended GTT with 5 samples for detailed glucose metabolism study.","icon":"💉"},{"id":"b23","name":"LDH","price":800,"category":"Cardiac","desc":"Lactate dehydrogenase – tissue damage marker used in cardiac events.","icon":"❤️"},{"id":"b24","name":"CPK (Creatine Phosphokinase)","price":500,"category":"Cardiac","desc":"Muscle enzyme elevated in heart attack and muscle disease.","icon":"❤️"},{"id":"b25","name":"CPK-MB Fraction","price":500,"category":"Cardiac","desc":"Cardiac-specific CPK fraction for myocardial infarction diagnosis.","icon":"❤️"},{"id":"b26","name":"Serum Amylase","price":800,"category":"Other","desc":"Pancreatic and salivary enzyme – elevated in pancreatitis.","icon":"🔬"},{"id":"b27","name":"Serum Lipase","price":800,"category":"Other","desc":"Pancreatic lipase – specific marker for pancreatic inflammation.","icon":"🔬"},{"id":"b28","name":"Ammonia","price":1200,"category":"Liver","desc":"Blood ammonia for liver failure and encephalopathy assessment.","icon":"🫀"},{"id":"b29","name":"Renal Profile","price":800,"category":"Kidney","desc":"Comprehensive kidney function panel – urea, creatinine, electrolytes.","icon":"🫘"},{"id":"b30","name":"Serum Cholesterol","price":200,"category":"Cardiac","desc":"Total cholesterol measurement for cardiovascular risk screening.","icon":"❤️"},{"id":"b31","name":"Serum Triglycerides","price":200,"category":"Cardiac","desc":"Triglyceride level – elevated levels indicate cardiovascular risk.","icon":"❤️"},{"id":"b32","name":"Serum HDL Cholesterol","price":200,"category":"Cardiac","desc":"High-density lipoprotein – \"good\" cholesterol measurement.","icon":"❤️"},{"id":"b33","name":"1.5 Hour Post-Lunch Glucose","price":60,"category":"Diabetes","desc":"Blood glucose measured 1.5 hours after lunch.","icon":"💉"},{"id":"m1","name":"Urine Culture & Sensitivity","price":1000,"category":"Other","desc":"Culture test for UTI pathogen identification and antibiotic sensitivity.","icon":"🔬"},{"id":"m2","name":"Body Fluid Culture & Sensitivity","price":1200,"category":"Other","desc":"Culture of body fluids for infection identification.","icon":"🔬"},{"id":"m3","name":"Pus Culture & Sensitivity","price":1200,"category":"Other","desc":"Wound/pus culture for bacterial identification and antibiotic guidance.","icon":"🔬"},{"id":"m4","name":"Blood Culture & Sensitivity","price":1500,"category":"Other","desc":"Blood culture for septicaemia and systemic infection diagnosis.","icon":"🔬"},{"id":"m5","name":"Sputum for Acid Fast Bacilli (AFB)","price":500,"category":"Other","desc":"AFB smear for tuberculosis diagnosis.","icon":"🔬"},{"id":"m6","name":"Stool Culture & Sensitivity","price":1100,"category":"Other","desc":"Stool culture for enteric pathogen identification.","icon":"🔬"},{"id":"m7","name":"Semen Culture & Sensitivity","price":1500,"category":"Hormone","desc":"Semen culture for genital tract infection and fertility workup.","icon":"⚗️"},{"id":"sp1","name":"FSH (Follicle Stimulating Hormone)","price":600,"category":"Hormone","desc":"FSH level – essential for fertility and reproductive health evaluation.","icon":"⚗️"},{"id":"sp2","name":"LH (Luteinising Hormone)","price":600,"category":"Hormone","desc":"LH measurement for ovulation, fertility and hormonal disorders.","icon":"⚗️"},{"id":"sp3","name":"Prolactin","price":600,"category":"Hormone","desc":"Prolactin level for lactation disorders and pituitary function.","icon":"⚗️"},{"id":"sp4","name":"PSA (Prostate Specific Antigen)","price":1200,"category":"Hormone","desc":"PSA screen for prostate cancer and prostatic diseases.","icon":"⚗️"},{"id":"sp5","name":"Estradiol (E2)","price":1200,"category":"Hormone","desc":"Oestrogen level for reproductive health, menopause and IVF monitoring.","icon":"⚗️"},{"id":"sp6","name":"Progesterone","price":1200,"category":"Hormone","desc":"Progesterone test for ovulation confirmation and pregnancy support.","icon":"⚗️"},{"id":"sp7","name":"Testosterone","price":1000,"category":"Hormone","desc":"Total testosterone for hypogonadism, infertility and PCOS.","icon":"⚗️"},{"id":"sp8","name":"Beta HCG","price":1000,"category":"Hormone","desc":"Quantitative hCG for early pregnancy confirmation and monitoring.","icon":"⚗️"},{"id":"sp9","name":"Growth Hormone","price":1100,"category":"Hormone","desc":"Growth hormone level for GH deficiency and acromegaly diagnosis.","icon":"⚗️"},{"id":"sp10","name":"PTH (Parathyroid Hormone)","price":1500,"category":"Hormone","desc":"PTH measurement for parathyroid disorders and calcium metabolism.","icon":"⚗️"},{"id":"sp11","name":"FT3, FT4, TSH (Ultra)","price":900,"category":"Thyroid","desc":"Free T3, Free T4 and ultrasensitive TSH – complete thyroid assessment.","icon":"🦋"},{"id":"sp12","name":"Thyroid Panel (T3, T4, TSH)","price":600,"category":"Thyroid","desc":"Standard thyroid panel for screening and monitoring thyroid disease.","icon":"🦋"},{"id":"sp13","name":"Anti-Thyroid Antibodies","price":2700,"category":"Thyroid","desc":"TPO, anti-thyroglobulin antibodies for autoimmune thyroid disease.","icon":"🦋"},{"id":"sp14","name":"TSH Ultrasensitive","price":400,"category":"Thyroid","desc":"Highly sensitive TSH for precise thyroid function monitoring.","icon":"🦋"},{"id":"sp15","name":"CMV IgG / IgM","price":1500,"category":"Other","desc":"Cytomegalovirus antibody test – important in pregnancy and transplant.","icon":"🔬"},{"id":"sp16","name":"Herpes IgG / IgM","price":2400,"category":"Other","desc":"Herpes simplex virus antibody panel.","icon":"🔬"},{"id":"sp17","name":"TORCH-6 Panel IgG / IgM","price":3000,"category":"Other","desc":"TORCH panel (6 parameters) for prenatal infection screening.","icon":"🔬"},{"id":"sp18","name":"TORCH-8 Panel IgG / IgM","price":3800,"category":"Other","desc":"TORCH panel (8 parameters) for comprehensive prenatal infection screen.","icon":"🔬"},{"id":"sp19","name":"TORCH-10 Panel IgG / IgM","price":4800,"category":"Other","desc":"Complete TORCH panel (10 parameters) for prenatal infection workup.","icon":"🔬"},{"id":"sp20","name":"Toxoplasma IgG / IgM","price":1000,"category":"Other","desc":"Toxoplasmosis antibody – essential for pregnant women.","icon":"🔬"},{"id":"sp21","name":"Rubella IgG / IgM","price":1000,"category":"Other","desc":"Rubella antibody – immunity check before and during pregnancy.","icon":"🔬"},{"id":"sp22","name":"Western Blot (HIV)","price":3200,"category":"Other","desc":"Confirmatory Western Blot test for HIV diagnosis.","icon":"🔬"},{"id":"sp23","name":"Vitamin B12","price":850,"category":"Vitamin","desc":"Vitamin B12 level – deficiency causes anaemia and neuropathy.","icon":"🌟"},{"id":"sp24","name":"Vitamin D3 (25-OH Hydroxy)","price":1500,"category":"Vitamin","desc":"25-hydroxy Vitamin D3 – the standard deficiency screening test.","icon":"🌟"},{"id":"sp25","name":"Vitamin D (1,25-OH Dihydroxy)","price":4600,"category":"Vitamin","desc":"Active Vitamin D form – for detailed Vitamin D metabolism study.","icon":"🌟"},{"id":"sp26","name":"Serum Iron (Sr. Iron)","price":400,"category":"Blood Test","desc":"Serum iron measurement for iron deficiency and overload.","icon":"🩸"},{"id":"sp27","name":"Iron Profile","price":800,"category":"Blood Test","desc":"Iron, TIBC and transferrin saturation panel.","icon":"🩸"},{"id":"sp28","name":"Serum Ferritin","price":1000,"category":"Blood Test","desc":"Ferritin – stored iron marker; low in deficiency, high in inflammation.","icon":"🩸"},{"id":"sp29","name":"Serum Insulin","price":1100,"category":"Diabetes","desc":"Fasting insulin level for insulin resistance and diabetes assessment.","icon":"💉"},{"id":"sp30","name":"AFP (Alpha-Fetoprotein)","price":1000,"category":"Other","desc":"Tumour marker for liver cancer and neural tube defects in pregnancy.","icon":"🔬"},{"id":"sp31","name":"CEA (Carcinoembryonic Antigen)","price":800,"category":"Other","desc":"Cancer marker used to monitor colorectal and other cancers.","icon":"🔬"},{"id":"sp32","name":"CA-125","price":1500,"category":"Other","desc":"Cancer antigen 125 – ovarian cancer and monitoring marker.","icon":"🔬"},{"id":"sp33","name":"CA 19-9","price":1500,"category":"Other","desc":"Cancer antigen 19-9 – pancreatic and gastrointestinal cancer marker.","icon":"🔬"},{"id":"sp34","name":"Folic Acid","price":900,"category":"Vitamin","desc":"Folate level – critical for neural tube development in pregnancy.","icon":"🌟"},{"id":"sp35","name":"Haemoglobin Electrophoresis (HbE)","price":1500,"category":"Blood Test","desc":"Electrophoresis for haemoglobin variants including sickle cell and thalassaemia.","icon":"🩸"},{"id":"sp36","name":"Cholinesterase","price":1500,"category":"Other","desc":"Serum cholinesterase – liver function and organophosphate poisoning.","icon":"🔬"},{"id":"sp37","name":"Protein C + Protein S","price":7000,"category":"Other","desc":"Anticoagulant proteins for clotting disorder evaluation.","icon":"🔬"},{"id":"sp38","name":"Anti-Thrombin Profile","price":2850,"category":"Other","desc":"Antithrombin III level for thrombosis risk assessment.","icon":"🔬"},{"id":"sp39","name":"G-6-PD Levels","price":1000,"category":"Blood Test","desc":"Glucose-6-phosphate dehydrogenase – enzyme deficiency screening.","icon":"🩸"},{"id":"sp40","name":"BNP (Brain Natriuretic Peptide)","price":3500,"category":"Cardiac","desc":"BNP – heart failure severity and cardiac stress marker.","icon":"❤️"},{"id":"sp41","name":"Protein Electrophoresis","price":1500,"category":"Other","desc":"Serum protein electrophoresis for myeloma and protein disorders.","icon":"🔬"},{"id":"sp42","name":"ACTH","price":1400,"category":"Hormone","desc":"Adrenocorticotropic hormone for adrenal gland function assessment.","icon":"⚗️"},{"id":"sp43","name":"Cardiolipin Antibody IgG/IgM","price":1500,"category":"Cardiac","desc":"Antiphospholipid antibody for clotting and autoimmune disorders.","icon":"❤️"},{"id":"sp44","name":"VMA (Vanillylmandelic Acid)","price":3500,"category":"Other","desc":"Urine VMA for pheochromocytoma and neuroblastoma diagnosis.","icon":"🔬"},{"id":"sp45","name":"Pleural Fluid Examination","price":1000,"category":"Other","desc":"Physical, chemical and microscopic analysis of pleural fluid.","icon":"🔬"},{"id":"sp46","name":"Ascitic Fluid Examination","price":1000,"category":"Other","desc":"Analysis of abdominal fluid for infection and malignancy.","icon":"🔬"},{"id":"sp47","name":"CSF Fluid Examination","price":1000,"category":"Other","desc":"Cerebrospinal fluid analysis for meningitis and neurological disorders.","icon":"🔬"},{"id":"sp48","name":"Sickle Cell Test","price":1000,"category":"Blood Test","desc":"Screening test for sickle cell disease and sickle cell trait.","icon":"🩸"},{"id":"sp49","name":"Osmotic Fragility Test","price":1150,"category":"Blood Test","desc":"Red cell osmotic fragility – used for hereditary spherocytosis.","icon":"🩸"},{"id":"sp50","name":"Apolipoprotein-A1 (Apo-A1)","price":1000,"category":"Cardiac","desc":"Apo-A1 – component of HDL; advanced cardiac risk marker.","icon":"❤️"},{"id":"sp51","name":"Apolipoprotein-B (Apo-B)","price":1000,"category":"Cardiac","desc":"Apo-B – atherogenic lipoprotein for cardiovascular risk.","icon":"❤️"},{"id":"sp52","name":"Lipoprotein-a (Lp-a)","price":1500,"category":"Cardiac","desc":"Lp(a) – independent cardiac risk factor for coronary artery disease.","icon":"❤️"},{"id":"sp53","name":"Immunoglobulin A (IgA)","price":1100,"category":"Other","desc":"IgA immunoglobulin for mucosal immunity and celiac disease screening.","icon":"🔬"},{"id":"sp54","name":"Immunoglobulin G (IgG)","price":1100,"category":"Other","desc":"IgG – primary antibody class for infection history and immune deficiency.","icon":"🔬"},{"id":"sp55","name":"Immunoglobulin M (IgM)","price":1100,"category":"Other","desc":"IgM – first antibody in acute infection response.","icon":"🔬"},{"id":"sp56","name":"C3 (Complement)","price":1000,"category":"Other","desc":"Complement C3 for autoimmune and inflammatory disease monitoring.","icon":"🔬"},{"id":"sp57","name":"C4 (Complement)","price":1000,"category":"Other","desc":"Complement C4 for lupus and autoimmune disorder monitoring.","icon":"🔬"},{"id":"sp58","name":"CD4","price":1000,"category":"Other","desc":"CD4 T-cell count – essential for HIV disease monitoring.","icon":"🔬"},{"id":"sp59","name":"CD8","price":1000,"category":"Other","desc":"CD8 T-cell count for immune system assessment in HIV.","icon":"🔬"},{"id":"sp60","name":"CD4/CD8 Ratio","price":2200,"category":"Other","desc":"CD4/CD8 ratio for immune status evaluation in HIV patients.","icon":"🔬"},{"id":"sp61","name":"Triple Test (Prenatal)","price":3000,"category":"Other","desc":"Maternal serum triple test for Down syndrome risk assessment.","icon":"🔬"},{"id":"sp62","name":"Double Marker (Prenatal)","price":2500,"category":"Other","desc":"First trimester Down syndrome risk screening (PAPP-A + Beta HCG).","icon":"🔬"},{"id":"sp63","name":"Quadruple Marker (Prenatal)","price":3500,"category":"Other","desc":"Second trimester prenatal screening for chromosomal anomalies.","icon":"🔬"},{"id":"sp64","name":"TB PCR","price":4000,"category":"Other","desc":"Molecular PCR test for rapid tuberculosis diagnosis.","icon":"🔬"},{"id":"sp65","name":"HIV PCR","price":4000,"category":"Other","desc":"HIV PCR for early infection detection and viral load.","icon":"🔬"},{"id":"sp66","name":"ANA (Anti-Nuclear Antibody)","price":1500,"category":"Other","desc":"ANA screening for autoimmune diseases including lupus.","icon":"🔬"},{"id":"sp67","name":"ANA Blot Assay","price":4000,"category":"Other","desc":"ANA sub-type panel for specific autoimmune antibody identification.","icon":"🔬"},{"id":"sp68","name":"DS DNA","price":1800,"category":"Other","desc":"Double-stranded DNA antibody – specific marker for SLE (lupus).","icon":"🔬"},{"id":"sp69","name":"ADA (Adenosine Deaminase)","price":800,"category":"Other","desc":"ADA activity in fluids – used for TB pleural and pericardial diagnosis.","icon":"🔬"},{"id":"sp70","name":"TB Gold","price":4000,"category":"Other","desc":"Interferon-gamma release assay (IGRA) for latent TB detection.","icon":"🔬"},{"id":"sp71","name":"Allergy Panel – Food","price":5000,"category":"Other","desc":"IgE panel for common food allergen sensitivity testing.","icon":"🔬"},{"id":"sp72","name":"Allergy Panel – Inhalant","price":5000,"category":"Other","desc":"IgE panel for environmental and inhalant allergen sensitivity.","icon":"🔬"},{"id":"sp73","name":"PAP Smear","price":1200,"category":"Other","desc":"Cervical cytology for cancer screening and HPV detection.","icon":"🔬"},{"id":"sp74","name":"Small Biopsy (Histopathology)","price":1500,"category":"Other","desc":"Histopathological examination of small tissue biopsy specimens.","icon":"🔬"},{"id":"sp75","name":"Medium Biopsy (Histopathology)","price":2500,"category":"Other","desc":"Histopathological examination of medium sized tissue specimens.","icon":"🔬"},{"id":"sp76","name":"Large Biopsy (Histopathology)","price":3500,"category":"Other","desc":"Histopathological examination of large tissue specimens.","icon":"🔬"},{"id":"sp77","name":"Cortisol","price":800,"category":"Hormone","desc":"Cortisol (stress hormone) for adrenal gland disorders and Cushings.","icon":"⚗️"},{"id":"sp78","name":"DHEAS","price":800,"category":"Hormone","desc":"DHEA-sulphate – adrenal androgen for PCOS and adrenal function.","icon":"⚗️"},{"id":"sp79","name":"HBV IgG / IgM","price":3300,"category":"Other","desc":"Hepatitis B core antibody (IgG/IgM) for infection and immunity.","icon":"🔬"},{"id":"sp80","name":"HAV IgG / IgM","price":1950,"category":"Other","desc":"Hepatitis A virus antibody for infection and immunity assessment.","icon":"🔬"},{"id":"sp81","name":"FNAC","price":1200,"category":"Other","desc":"Fine needle aspiration cytology for lump and mass evaluation.","icon":"🔬"},{"id":"sp82","name":"C-Peptide","price":2000,"category":"Diabetes","desc":"C-peptide for insulin production assessment in diabetes.","icon":"💉"},{"id":"sp83","name":"Homocysteine","price":1500,"category":"Cardiac","desc":"Elevated homocysteine is a cardiac and stroke risk factor.","icon":"❤️"},{"id":"sp84","name":"TPO Antibodies","price":1800,"category":"Thyroid","desc":"Thyroid peroxidase antibodies for Hashimoto thyroiditis diagnosis.","icon":"🦋"},{"id":"sp85","name":"Carbamazepine Level","price":1500,"category":"Other","desc":"Drug level monitoring for carbamazepine (epilepsy treatment).","icon":"🔬"},{"id":"sp86","name":"Chikungunya IgG and IgM","price":1000,"category":"Other","desc":"Combined IgG and IgM test for Chikungunya infection.","icon":"🔬"}];
+const defaultPackages=[{"id":"p1","name":"Preventive Health Package","origPrice":2400,"discPrice":1800,"popular":true,"tests":["CBC with ESR","BSL Fasting + PP","Renal Function Test","Liver Function Test","Lipid Profile","Serum Calcium","Thyroid Function Test (TFT)","Urine Routine & Microscopy"],"desc":"Comprehensive annual preventive health screen covering major organ systems."},{"id":"p2","name":"Hypertension Profile","origPrice":1300,"discPrice":1000,"popular":false,"tests":["CBC","BSL Fasting + PP","Renal Function Test","Lipid Profile","Urine Routine & Microscopy"],"desc":"Targeted panel to monitor cardiovascular risk and kidney function in hypertensive patients."},{"id":"p3","name":"Cardiac Profile","origPrice":2950,"discPrice":2200,"popular":true,"tests":["CBC","BSL Fasting + PP","Renal Function Test","Lipid Profile","Urine Routine & Microscopy","SGPT","SGOT","Serum Electrolytes","HbA1c","Serum Calcium","Serum Proteins"],"desc":"Complete cardiac risk assessment panel covering lipids, sugars, liver and kidney function."},{"id":"p4","name":"Diabetic Profile – I","origPrice":600,"discPrice":400,"popular":false,"tests":["BSL Fasting + PP","HbA1c"],"desc":"Basic diabetes monitoring panel – blood sugar and glycated haemoglobin."},{"id":"p5","name":"Diabetic Profile – II","origPrice":1300,"discPrice":800,"popular":false,"tests":["CBC","BSL Fasting + PP","HbA1c","Lipid Profile"],"desc":"Intermediate diabetes panel with blood count and lipid assessment."},{"id":"p6","name":"Diabetic Profile – III","origPrice":2000,"discPrice":1100,"popular":false,"tests":["CBC","BSL Fasting + PP","HbA1c","Lipid Profile","Microalbuminuria"],"desc":"Advanced diabetes panel including microalbuminuria for early kidney damage detection."},{"id":"p7","name":"Fever Profile","origPrice":1100,"discPrice":800,"popular":false,"tests":["CBC with ESR","Rapid Malaria Test","SGPT","Widal","Urine Routine & Microscopy"],"desc":"Fever workup panel for common tropical infections including malaria and typhoid."},{"id":"p8","name":"Fitness Health Package","origPrice":6000,"discPrice":2999,"popular":true,"tests":["CBC + ESR","BSL Fasting + PP","Renal Function Test","Liver Function Test","Lipid Profile","Serum Calcium","Iron Profile","Thyroid Function Test (TFT)","Vitamin B12","Vitamin D3","HbA1c","Urine Routine & Microscopy"],"desc":"Full fitness and wellness panel for a complete picture of your health."},{"id":"p9","name":"Body Indicator Package","origPrice":2400,"discPrice":1199,"popular":false,"tests":["CBC","BSL Fasting","Serum Creatinine","Bilirubin (T, D, I)","SGPT","Cholesterol","Triglycerides","Serum Calcium","Serum Iron","Potassium","CRP","TSH","Urine Routine & Microscopy"],"desc":"Key body health indicators covering liver, kidney, cardiac and thyroid function."},{"id":"p10","name":"ANC Profile – I","origPrice":1090,"discPrice":950,"popular":false,"tests":["CBC","Blood Group","Blood Sugar","HIV I & II","HBsAg","VDRL","Urine Routine & Microscopy"],"desc":"First trimester antenatal care panel for pregnant women."},{"id":"p11","name":"ANC Profile – II","origPrice":1440,"discPrice":1250,"popular":false,"tests":["CBC","Blood Group","Blood Sugar","HIV I & II","HBsAg","VDRL","Urine Routine & Microscopy","TSH"],"desc":"Second trimester antenatal panel with added thyroid screening."},{"id":"p12","name":"Anemia Profile","origPrice":4450,"discPrice":3000,"popular":false,"tests":["CBC","Iron + TIBC","Serum Ferritin","CRP","Reticulocyte Count","Vitamin B12","Folic Acid"],"desc":"Comprehensive anaemia workup panel to identify cause and severity."},{"id":"p13","name":"Arthritis Profile – I","origPrice":1650,"discPrice":1000,"popular":false,"tests":["ESR","Serum Calcium","Serum Uric Acid","RA Factor","CRP","ASO Titre"],"desc":"Basic arthritis screen for inflammatory and crystal arthropathies."},{"id":"p14","name":"Arthritis Profile – II","origPrice":1750,"discPrice":850,"popular":false,"tests":["CBC with ESR","Serum Calcium","Serum Uric Acid","RA Factor","CRP","ASO Titre"],"desc":"Enhanced arthritis panel with full blood count added."},{"id":"p15","name":"Pre-Operative Profile – I","origPrice":700,"discPrice":500,"popular":false,"tests":["CBC","Blood Group","Bleeding Time","Clotting Time","Serum Creatinine","Blood Sugar (Random)"],"desc":"Essential pre-surgery tests for routine surgical procedures."},{"id":"p16","name":"Pre-Operative Profile – II","origPrice":2100,"discPrice":1200,"popular":false,"tests":["CBC","Blood Group","Bleeding Time","Clotting Time","Serum Creatinine","Blood Sugar (Random)","HIV I & II Antibodies","HBsAg","HCV Antibodies","VDRL","Urine Routine & Microscopy"],"desc":"Comprehensive pre-operative panel including all mandatory infection screenings."},{"id":"p17","name":"Infertility Profile","origPrice":3050,"discPrice":2000,"popular":false,"tests":["CBC","Blood Group","Blood Sugar","HIV I & II","HBsAg","Thyroid Function Test (TFT)","FSH","LH","Prolactin","Urine Routine & Microscopy"],"desc":"Complete infertility workup panel for hormonal and infection assessment."}];
+function getTests(){try{var r=localStorage.getItem(TESTS_KEY);return r?JSON.parse(r):defaultTests}catch(e){return defaultTests}}
+function getPackages(){try{var r=localStorage.getItem(PACKAGES_KEY);return r?JSON.parse(r):defaultPackages}catch(e){return defaultPackages}}
+function getContact(){try{var r=localStorage.getItem(CONTACT_KEY);return r?JSON.parse(r):Object.assign({},defaultContact)}catch(e){return Object.assign({},defaultContact)}}
+function saveTests(t){localStorage.setItem(TESTS_KEY,JSON.stringify(t))}
+function savePackages(p){localStorage.setItem(PACKAGES_KEY,JSON.stringify(p))}
+function saveContact(c){localStorage.setItem(CONTACT_KEY,JSON.stringify(c))}
+function generateId(p){return p+Date.now()+Math.random().toString(36).slice(2,6)}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 
-// ============================================================
-// MIGRATION: load old data if new store is empty
-// ============================================================
-function migrateOldData() {
-    const old = localStorage.getItem('apex_v3.5');
-    if (old && trades.length === 0) {
-        try {
-            const parsed = JSON.parse(old);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-                trades = parsed.map(t => ({ ...t, notes: t.notes || '' }));
-                persistTrades();
-                showToast('Migrated ' + trades.length + ' trades from v3.5', 'success');
-            }
-        } catch(e) {}
-    }
+var currentTests=getTests(),currentPackages=getPackages(),currentContact=getContact();
+var adminLoggedIn=false,adminTab='tests';
+
+window.addEventListener('scroll',function(){document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>10)});
+function toggleMobile(){document.getElementById('mobileMenu').classList.toggle('open')}
+function closeMobile(){document.getElementById('mobileMenu').classList.remove('open')}
+
+function renderTests(){
+  var q=(document.getElementById('testSearch').value||'').toLowerCase().trim();
+  var cat=document.getElementById('testCatFilter').value;
+  var filtered=currentTests.filter(function(t){
+    var mq=!q||t.name.toLowerCase().indexOf(q)>=0||(t.desc&&t.desc.toLowerCase().indexOf(q)>=0);
+    var mc=!cat||t.category===cat;
+    return mq&&mc;
+  });
+  var grid=document.getElementById('testsGrid');
+  if(!filtered.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:64px 0;color:var(--gray-500)"><div style="font-size:3rem;margin-bottom:12px">🔍</div><strong>No tests found</strong><p style="margin-top:8px;font-size:.875rem">Try a different search term or category.</p></div>';return}
+  grid.innerHTML=filtered.map(function(t){
+    var cls=catClassMap[t.category]||'cat-other';
+    var icon=t.icon||catIconMap[t.category]||'🔬';
+    return '<div class="test-card"><div class="top"><span class="cat-badge '+cls+'">'+esc(t.category)+'</span><div class="icon-box">'+icon+'</div></div><div class="cname">'+esc(t.name)+'</div><div class="desc">'+esc(t.desc||'Precise diagnostic test performed by certified professionals.')+'</div><div class="bottom"><div class="price">₹'+Number(t.price).toLocaleString('en-IN')+'<small> onwards</small></div><button class="book-btn gradient-bg" onclick="openBooking(\''+esc(t.name).replace(/'/g,"\\'")+'\')">Book</button></div></div>';
+  }).join('');
 }
 
-// ============================================================
-// PERSIST
-// ============================================================
-function persistTrades() { localStorage.setItem('apex_v4', JSON.stringify(trades)); }
-function saveCfg() { localStorage.setItem('apex_cfg_v4', JSON.stringify(config)); }
-function persistNotes() { localStorage.setItem('apex_notes_v4', JSON.stringify(notes)); }
-
-// ============================================================
-// TOAST
-// ============================================================
-function showToast(msg, type = 'success') {
-    const container = document.getElementById('toast');
-    const el = document.createElement('div');
-    el.className = 'toast-item' + (type === 'error' ? ' error' : '');
-    el.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}"></i>${msg}`;
-    container.appendChild(el);
-    setTimeout(() => el.remove(), 3200);
+function renderPackages(){
+  var grid=document.getElementById('packagesGrid');
+  grid.innerHTML=currentPackages.map(function(p){
+    var vis=p.tests.slice(0,5);var extra=p.tests.length-5;
+    var savings=p.origPrice>p.discPrice?Math.round((1-p.discPrice/p.origPrice)*100):0;
+    return '<div class="pkg-card'+(p.popular?' popular':'')+'">'+
+      (p.popular?'<div class="popular-ribbon">⭐ Popular</div>':'')+
+      '<div class="pkg-header"><div class="pname">'+esc(p.name)+'</div><div class="info">'+p.tests.length+' tests included · '+esc(p.desc||'')+'</div></div>'+
+      '<div class="pkg-tests">'+vis.map(function(t){return '<div class="test-item"><span class="check">✓</span>'+esc(t)+'</div>'}).join('')+
+      (extra>0?'<div class="more">+'+extra+' more tests</div>':'')+
+      '</div><div class="pkg-footer"><div>'+
+      (p.origPrice>p.discPrice?'<div class="orig">₹'+Number(p.origPrice).toLocaleString('en-IN')+'</div>':'')+
+      '<div class="disc">₹'+Number(p.discPrice).toLocaleString('en-IN')+'</div>'+
+      (savings>0?'<div class="save">Save '+savings+'%</div>':'')+
+      '</div><button class="book-btn gradient-bg" onclick="openBooking(\''+esc(p.name).replace(/'/g,"\\'")+'\')">Book Now</button></div></div>';
+  }).join('');
 }
 
-// ============================================================
-// CLOCK
-// ============================================================
-function updateClock() {
-    const now = new Date();
-    document.getElementById('clockDisplay').textContent =
-        now.toLocaleTimeString('en-US', { hour12: false }) + ' · ' +
-        now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-}
-setInterval(updateClock, 1000);
-updateClock();
-
-// ============================================================
-// TAB SWITCHING
-// ============================================================
-function switchTab(tab) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-    document.getElementById('view-' + tab).classList.add('active');
-    document.getElementById('btn-' + tab).classList.add('active');
-
-    const filterBar = document.getElementById('filter-bar');
-    if (tab === 'dashboard') {
-        filterBar.style.display = 'block';
-        populateFilters();
-        renderDashboard();
-    } else {
-        filterBar.style.display = 'none';
-    }
-
-    if (tab === 'heatmap') { populateHeatYears(); renderHeatmap(); }
-    if (tab === 'notes') renderNotesList();
-
-    renderKPIs();
+function renderContact(){
+  var c=currentContact;
+  var cards=[{icon:'📍',label:'Address',value:c.address},{icon:'📞',label:'Phone / WhatsApp',value:c.phone},{icon:'📧',label:'Email',value:c.email},{icon:'⏰',label:'Working Hours',value:c.hours}];
+  var grid=document.getElementById('contactGrid');
+  var html='<div>'+cards.map(function(cd){return '<div class="contact-card"><div class="icon-box">'+cd.icon+'</div><div><div class="clabel">'+cd.label+'</div><div class="cvalue">'+cd.value+'</div></div></div>'}).join('')+'</div>';
+  html+='<div>'+(c.mapUrl?'<iframe src="'+esc(c.mapUrl)+'" width="100%" height="340" style="border:0;border-radius:22px" allowfullscreen loading="lazy"></iframe>':'<div style="background:var(--gray-100);border-radius:22px;height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--gray-500);border:2px dashed var(--gray-300)"><div style="font-size:2.5rem">🗺️</div><strong>Map Location</strong><span style="font-size:.75rem;text-align:center;padding:0 20px">Add your Google Maps embed URL in the Admin Panel → Contact Details tab.</span></div>')+'</div>';
+  grid.innerHTML=html;
 }
 
-// ============================================================
-// FORM LOGIC
-// ============================================================
-function handleTypeChange(select) {
-    if (select.value === 'ADD_NEW') {
-        const n = prompt('New Trade Type:');
-        if (n && n.trim()) {
-            config.types.push(n.trim());
-            saveCfg(); renderLists(); select.value = n.trim();
-        } else select.selectedIndex = 0;
-    }
-    document.getElementById('options-field').style.display =
-        select.value === 'Options' ? 'block' : 'none';
+function populateCatFilter(){
+  var sel=document.getElementById('testCatFilter');
+  sel.innerHTML='<option value="">All Categories</option>'+categories.map(function(c){return '<option value="'+c+'">'+c+'</option>'}).join('');
 }
 
-function handleStrategyChange(select) {
-    if (select.value === 'ADD_NEW') {
-        const n = prompt('New Strategy:');
-        if (n && n.trim()) {
-            config.strats.push(n.trim());
-            saveCfg(); renderLists(); select.value = n.trim();
-        } else select.selectedIndex = 0;
-    }
+function openBooking(testName){
+  var sel=document.getElementById('bTest');
+  sel.innerHTML='<option value="">Select a test or package</option><optgroup label="Individual Tests">'+currentTests.map(function(t){return '<option value="'+esc(t.name)+'">'+esc(t.name)+' – ₹'+t.price+'</option>'}).join('')+'</optgroup><optgroup label="Packages">'+currentPackages.map(function(p){return '<option value="'+esc(p.name)+'">'+esc(p.name)+' – ₹'+p.discPrice+'</option>'}).join('')+'</optgroup><option value="__custom__">✏️ Type a custom test name…</option>';
+  if(testName)sel.value=testName;
+  document.getElementById('bDate').min=new Date().toISOString().split('T')[0];
+  document.getElementById('customTestGroup').style.display='none';
+  document.getElementById('bookingModal').classList.add('open');
+}
+function closeBooking(){document.getElementById('bookingModal').classList.remove('open')}
+
+function submitBooking(){
+  var name=document.getElementById('bName').value;
+  var phone=document.getElementById('bPhone').value;
+  var age=document.getElementById('bAge').value;
+  var email=document.getElementById('bEmail').value;
+  var selTest=document.getElementById('bTest').value;
+  var customTest=document.getElementById('bCustomTest').value;
+  var date=document.getElementById('bDate').value;
+  var slot=document.getElementById('bSlot').value;
+  var collection=document.getElementById('bCollection').value;
+  var address=document.getElementById('bAddress').value;
+  if(!name)return alert('Please enter your name.');
+  if(!phone)return alert('Please enter your phone number.');
+  var test=selTest==='__custom__'?customTest:selTest;
+  if(!test)return alert('Please select or type a test / package name.');
+  if(selTest==='__custom__'&&!customTest)return alert('Please type the test name.');
+  if(!date)return alert('Please select a preferred date.');
+  var fd=new Date(date).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  var parts=['🔬 *New Booking – Lumin Pathlab*','─────────────────────','👤 *Name:*         '+name,'📞 *Phone:*        '+phone];
+  if(age)parts.push('🎂 *Age:*          '+age);
+  if(email)parts.push('📧 *Email:*        '+email);
+  parts.push('🧪 *Test/Package:* '+test,'📅 *Date:*         '+fd,'⏰ *Time Slot:*    '+slot,'🏠 *Collection:*   '+collection);
+  if(collection==='Home Collection'&&address)parts.push('📍 *Address:*      '+address);
+  parts.push('─────────────────────','_Sent via Lumin Pathlab website_');
+  var url='https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent(parts.join('\n'));
+  closeBooking();
+  document.getElementById('bName').value='';document.getElementById('bPhone').value='';document.getElementById('bAge').value='';document.getElementById('bEmail').value='';document.getElementById('bAddress').value='';document.getElementById('bCustomTest').value='';
+  setTimeout(function(){window.open(url,'_blank')},300);
 }
 
-function renderLists() {
-    const tSel = document.getElementById('tradeType');
-    const sSel = document.getElementById('strategy');
-    const fSel = document.getElementById('fType');
-    const curT = tSel.value, curS = sSel.value;
-    tSel.innerHTML = config.types.map(t => `<option>${t}</option>`).join('') + `<option value="ADD_NEW">＋ Add New</option>`;
-    sSel.innerHTML = config.strats.map(s => `<option>${s}</option>`).join('') + `<option value="ADD_NEW">＋ Add New</option>`;
-    fSel.innerHTML = `<option value="All">All Types</option>` + config.types.map(t => `<option>${t}</option>`).join('');
-    if (curT) tSel.value = curT;
-    if (curS) sSel.value = curS;
-}
+function openAdmin(){adminLoggedIn=false;adminTab='tests';document.getElementById('adminModal').classList.add('open');renderAdmin()}
+function closeAdmin(){document.getElementById('adminModal').classList.remove('open')}
 
-// ============================================================
-// BUG FIX: autoCalc now properly calculates R/R from SL/Target
-// ============================================================
-function autoCalc() {
-    const q  = parseFloat(document.getElementById('qty').value) || 0;
-    const en = parseFloat(document.getElementById('entryPrice').value) || 0;
-    const ex = parseFloat(document.getElementById('exitPrice').value) || 0;
-    const br = parseFloat(document.getElementById('brokerage').value) || 0;
-    const cap = parseFloat(document.getElementById('capital').value) || 1;
-    const side = document.getElementById('side').value;
-    const sl = parseFloat(document.getElementById('stopLoss').value) || 0;
-    const tgt = parseFloat(document.getElementById('targetPrice').value) || 0;
+function renderAdmin(){
+  var el=document.getElementById('adminContent');
+  if(!adminLoggedIn){
+    el.innerHTML='<div class="modal-header"><h3>🔐 Admin Login</h3><button class="modal-close" onclick="closeAdmin()">✕</button></div><div class="form-group"><label>Username</label><input id="aUser" value="admin"/></div><div class="form-group"><label>Password</label><input id="aPass" type="password" value="lumin@2025"/></div><button class="btn-submit gradient-bg" onclick="adminLogin()">🔓 Login</button><p style="font-size:.75rem;color:var(--gray-500);text-align:center;margin-top:12px">Default: admin / lumin@2025</p>';
+    return;
+  }
+  var tabs=['tests','packages','contact'];
+  var tabLabels={'tests':'🧪 Manage Tests','packages':'📦 Manage Packages','contact':'📍 Contact Details'};
+  var tabBtns=tabs.map(function(t){return '<button class="'+(adminTab===t?'active gradient-bg':'')+'" onclick="adminTab=\''+t+'\';renderAdmin()">'+tabLabels[t]+'</button>'}).join('');
+  var content='<div class="modal-header"><h3>⚙️ Admin Panel</h3><button class="modal-close" onclick="adminLoggedIn=false;closeAdmin()" style="width:auto;padding:0 16px;border-radius:99px;font-size:.875rem">✕ Logout</button></div><div class="admin-tabs">'+tabBtns+'</div>';
 
-    // BUG FIX: correctly handle SHORT side P&L calculation
-    const gross = side === 'BUY' ? (ex - en) * q : (en - ex) * q;
-    const net = gross - br;
-    const pct = cap > 0 ? (net / cap) * 100 : 0;
-
-    const pnlEl = document.getElementById('prev-pnl');
-    const grossEl = document.getElementById('prev-gross');
-    const box = document.getElementById('pnlPreviewBox');
-
-    pnlEl.textContent = '$' + net.toFixed(2);
-    pnlEl.style.color = net >= 0 ? 'var(--win)' : 'var(--loss)';
-    grossEl.textContent = '$' + gross.toFixed(2) + ' · ' + pct.toFixed(2) + '%';
-    box.className = 'pnl-container' + (net < 0 ? ' loss-mode' : '');
-
-    // Auto-calculate R/R from SL and Target fields
-    if (sl > 0 && tgt > 0 && en > 0) {
-        const risk   = side === 'BUY' ? Math.abs(en - sl) : Math.abs(sl - en);
-        const reward = side === 'BUY' ? Math.abs(tgt - en) : Math.abs(en - tgt);
-        const autoRR = risk > 0 ? (reward / risk).toFixed(2) : '—';
-        document.getElementById('rr').value = autoRR;
-        document.getElementById('rr-auto').innerHTML =
-            `<span class="rr-pill">⚖ Auto R/R: ${autoRR}</span>`;
-    } else {
-        document.getElementById('rr-auto').innerHTML = '';
-    }
-}
-
-// ============================================================
-// SAVE TRADE — BUG FIX: month format was inconsistent
-// ============================================================
-function saveTrade(e) {
-    e.preventDefault();
-    const dateStr = document.getElementById('date').value;
-    if (!dateStr) { showToast('Please select a date.', 'error'); return; }
-
-    // BUG FIX: use UTC date parsing to avoid timezone offset shifting the day
-    const [y, m, d] = dateStr.split('-').map(Number);
-    const dt = new Date(y, m - 1, d);
-
-    const q  = parseFloat(document.getElementById('qty').value);
-    const en = parseFloat(document.getElementById('entryPrice').value);
-    const ex = parseFloat(document.getElementById('exitPrice').value);
-    const br = parseFloat(document.getElementById('brokerage').value) || 0;
-    const cap = parseFloat(document.getElementById('capital').value) || 5000;
-    const side = document.getElementById('side').value;
-
-    // BUG FIX: consistent gross P&L for both sides
-    const gross = side === 'BUY' ? (ex - en) * q : (en - ex) * q;
-    const net = gross - br;
-
-    const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-
-    const trade = {
-        id: Date.now().toString() + Math.random().toString(36).slice(2, 6),
-        date: dateStr,
-        year: y.toString(),
-        // BUG FIX: was using d.toLocaleString which is locale-dependent and can fail
-        month: MONTHS[m - 1] + y.toString().slice(-2),
-        monthNum: m,
-        yearNum: y,
-        dayNum: d,
-        dow: DAYS[dt.getDay()],
-        ticker: document.getElementById('ticker').value.toUpperCase().trim(),
-        type: document.getElementById('tradeType').value,
-        strategy: document.getElementById('tradeType').value === 'Options'
-            ? document.getElementById('strategy').value : 'N/A',
-        side,
-        qty: q,
-        entry: en,
-        exit: ex,
-        brokerage: br,
-        capital: cap,
-        stopLoss: parseFloat(document.getElementById('stopLoss').value) || 0,
-        targetPrice: parseFloat(document.getElementById('targetPrice').value) || 0,
-        timeframe: document.getElementById('timeframe').value,
-        confidence: document.getElementById('confidence').value,
-        entryReason: document.getElementById('entryReason').value,
-        exitReason: document.getElementById('exitReason').value,
-        rr: parseFloat(document.getElementById('rr').value) || 1,
-        rules: document.getElementById('followedRules').value,
-        emotion: document.getElementById('emotion').value,
-        notes: document.getElementById('notes').value,
-        pnl: net,
-        grossPnl: gross,
-        // BUG FIX: was dividing by capital but capital can be 0 — guard added
-        pct: cap > 0 ? ((net / cap) * 100) : 0
-    };
-
-    trades.push(trade);
-    persistTrades();
-    e.target.reset();
-    document.getElementById('date').value = new Date().toISOString().split('T')[0];
-    document.getElementById('prev-pnl').textContent = '$0.00';
-    document.getElementById('prev-gross').textContent = '$0.00 · 0.00%';
-    document.getElementById('pnlPreviewBox').className = 'pnl-container';
-    currentPage = 1;
-    renderTable();
-    renderKPIs();
-    showToast(`Trade saved: ${trade.ticker} · Net $${net.toFixed(2)}`);
-}
-
-// ============================================================
-// TABLE RENDER — with search, sort, pagination
-// ============================================================
-function getFilteredSortedTrades() {
-    const search = (document.getElementById('searchBar')?.value || '').toLowerCase();
-    const sort = document.getElementById('sortCol')?.value || 'date_desc';
-
-    let arr = trades.filter(t =>
-        !search ||
-        t.ticker.toLowerCase().includes(search) ||
-        t.type.toLowerCase().includes(search) ||
-        (t.strategy && t.strategy.toLowerCase().includes(search)) ||
-        (t.notes && t.notes.toLowerCase().includes(search))
-    );
-
-    arr.sort((a, b) => {
-        switch(sort) {
-            case 'date_desc': return new Date(b.date) - new Date(a.date);
-            case 'date_asc':  return new Date(a.date) - new Date(b.date);
-            case 'pnl_desc':  return b.pnl - a.pnl;
-            case 'pnl_asc':   return a.pnl - b.pnl;
-            case 'ticker':    return a.ticker.localeCompare(b.ticker);
-            default: return new Date(b.date) - new Date(a.date);
-        }
+  if(adminTab==='tests'){
+    content+='<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap"><button class="gradient-bg" style="color:var(--primary-fg);padding:10px 20px;border-radius:4px;font-size:.875rem;font-weight:600" onclick="openTestForm()">＋ Add New Test</button><button style="background:var(--gray-50);border:1px solid var(--gray-100);padding:10px 20px;border-radius:4px;font-size:.875rem;font-weight:600" onclick="exportTests()">⬇ Export JSON</button><label style="background:var(--gray-50);border:1px solid var(--gray-100);padding:10px 20px;border-radius:4px;font-size:.875rem;font-weight:600;cursor:pointer">⬆ Import JSON<input type="file" accept=".json" style="display:none" onchange="importTests(event)"/></label></div>';
+    content+='<div class="table-wrap"><table class="admin-table"><thead><tr><th>#</th><th>Name</th><th>Category</th><th>Price</th><th>Actions</th></tr></thead><tbody>';
+    currentTests.forEach(function(t,i){
+      var cls=catClassMap[t.category]||'cat-other';
+      content+='<tr><td>'+(i+1)+'</td><td style="font-weight:600">'+esc(t.name)+'</td><td><span class="'+cls+'" style="display:inline-flex;padding:2px 10px;border-radius:99px;font-size:.7rem;font-weight:700">'+esc(t.category)+'</span></td><td>₹'+Number(t.price).toLocaleString('en-IN')+'</td><td><div style="display:flex;gap:8px"><button class="edit-btn" onclick="openTestForm(\''+t.id+'\')">✏ Edit</button><button class="del-btn" onclick="deleteTest(\''+t.id+'\')">🗑 Del</button></div></td></tr>';
     });
-
-    return arr;
-}
-
-function renderTable() {
-    const all = getFilteredSortedTrades();
-    const totalPages = Math.max(1, Math.ceil(all.length / PAGE_SIZE));
-    if (currentPage > totalPages) currentPage = totalPages;
-
-    const pageTrades = all.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
-    const body = document.getElementById('tableBody');
-    body.innerHTML = '';
-
-    if (pageTrades.length === 0) {
-        body.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:40px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);">NO TRADES YET — COMMIT YOUR FIRST TRADE</td></tr>`;
-    }
-
-    pageTrades.forEach(t => {
-        const netColor = t.pnl >= 0 ? 'var(--win)' : 'var(--loss)';
-        const grossColor = t.grossPnl >= 0 ? 'var(--win)' : 'var(--loss)';
-        body.innerHTML += `
-            <tr>
-                <td style="padding:12px 16px;">
-                    <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-mid);">${t.date}</span>
-                    <span class="ticker-tag" style="display:block;">${t.ticker}</span>
-                </td>
-                <td style="padding:12px 16px;">
-                    <span class="badge badge-type">${t.type}</span>
-                    ${t.strategy !== 'N/A' ? `<span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text-dim);display:block;margin-top:3px;">${t.strategy}</span>` : ''}
-                </td>
-                <td style="padding:12px 16px;">
-                    <span class="badge ${t.side === 'BUY' ? 'badge-buy' : 'badge-sell'}">${t.side === 'BUY' ? 'LONG' : 'SHORT'}</span>
-                </td>
-                <td style="padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-mid);">${t.qty}</td>
-                <td style="padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-mid);">$${t.entry.toFixed(2)}</td>
-                <td style="padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-mid);">$${t.exit.toFixed(2)}</td>
-                <td style="padding:12px 16px;"><span class="rr-pill">${(t.rr||0).toFixed(1)}</span></td>
-                <td style="padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:${grossColor};">$${t.grossPnl.toFixed(2)}</td>
-                <td style="padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:${netColor};">$${t.pnl.toFixed(2)}</td>
-                <td style="padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:10px;color:${netColor};">${(t.pct||0).toFixed(2)}%</td>
-                <td style="padding:12px 16px;text-align:center;display:flex;gap:8px;justify-content:center;align-items:center;min-height:44px;">
-                    <button onclick="openEditModal('${t.id}')" title="Edit" style="color:var(--text-dim);background:none;border:none;cursor:pointer;font-size:12px;padding:4px;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'"><i class="fas fa-pen"></i></button>
-                    <button onclick="deleteTrade('${t.id}')" title="Delete" style="color:var(--text-dim);background:none;border:none;cursor:pointer;font-size:12px;padding:4px;" onmouseover="this.style.color='var(--loss)'" onmouseout="this.style.color='var(--text-dim)'"><i class="fas fa-trash"></i></button>
-                </td>
-            </tr>`;
+    content+='</tbody></table></div>';
+  } else if(adminTab==='packages'){
+    content+='<div style="margin-bottom:16px"><button class="gradient-bg" style="color:var(--primary-fg);padding:10px 20px;border-radius:4px;font-size:.875rem;font-weight:600" onclick="openPkgForm()">＋ Add New Package</button></div>';
+    content+='<div class="table-wrap"><table class="admin-table"><thead><tr><th>#</th><th>Name</th><th>Orig</th><th>Disc</th><th>Tests</th><th>Popular</th><th>Actions</th></tr></thead><tbody>';
+    currentPackages.forEach(function(p,i){
+      content+='<tr><td>'+(i+1)+'</td><td style="font-weight:600">'+esc(p.name)+'</td><td>₹'+Number(p.origPrice).toLocaleString('en-IN')+'</td><td>₹'+Number(p.discPrice).toLocaleString('en-IN')+'</td><td>'+p.tests.length+'</td><td>'+(p.popular?'⭐':'–')+'</td><td><div style="display:flex;gap:8px"><button class="edit-btn" onclick="openPkgForm(\''+p.id+'\')">✏ Edit</button><button class="del-btn" onclick="deletePkg(\''+p.id+'\')">🗑 Del</button></div></td></tr>';
     });
-
-    // Footer
-    const totalNet = all.reduce((a, b) => a + b.pnl, 0);
-    document.getElementById('tableFooter').textContent =
-        `Showing ${pageTrades.length} of ${all.length} trades  ·  Filtered Net P&L: $${totalNet.toFixed(2)}`;
-
-    renderPagination(totalPages);
+    content+='</tbody></table></div>';
+  } else {
+    var c=currentContact;
+    content+='<p style="font-size:.875rem;color:var(--gray-500);margin-bottom:16px">Edit the contact information displayed on the website.</p>';
+    content+='<div class="form-group"><label>📍 Address</label><textarea id="cAddr" style="min-height:70px">'+c.address.replace(/<br\s*\/?>/gi,'\n')+'</textarea></div>';
+    content+='<div class="form-row"><div class="form-group"><label>📞 Phone</label><input id="cPhone" value="'+esc(c.phone)+'"/></div><div class="form-group"><label>📧 Email</label><input id="cEmail" value="'+esc(c.email)+'"/></div></div>';
+    content+='<div class="form-group"><label>⏰ Working Hours</label><input id="cHours" value="'+esc(c.hours.replace(/<br\s*\/?>/gi,' | '))+'"/></div>';
+    content+='<div class="form-group"><label>🗺️ Google Maps Embed URL</label><input id="cMap" value="'+esc(c.mapUrl||'')+'"/></div>';
+    content+='<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="gradient-bg" style="color:var(--primary-fg);padding:12px 24px;border-radius:8px;font-weight:700" onclick="saveContactAdmin()">✅ Save</button><button style="padding:12px 24px;border-radius:8px;background:transparent;border:2px solid var(--gray-100);font-weight:600" onclick="resetContactAdmin()">↩ Reset</button></div>';
+  }
+  el.innerHTML=content;
 }
 
-function renderPagination(totalPages) {
-    const c = document.getElementById('paginationControls');
-    c.innerHTML = '';
-    if (totalPages <= 1) return;
-
-    const prev = document.createElement('button');
-    prev.className = 'page-btn'; prev.textContent = '‹';
-    prev.disabled = currentPage === 1;
-    prev.onclick = () => { if (currentPage > 1) { currentPage--; renderTable(); }};
-    c.appendChild(prev);
-
-    for (let i = 1; i <= totalPages; i++) {
-        if (totalPages > 7 && i > 2 && i < totalPages - 1 && Math.abs(i - currentPage) > 1) {
-            if (i === 3 || i === totalPages - 2) {
-                const dot = document.createElement('span');
-                dot.textContent = '…';
-                dot.style.cssText = 'font-family:monospace;font-size:10px;color:var(--text-dim);padding:0 4px;';
-                c.appendChild(dot);
-            }
-            continue;
-        }
-        const btn = document.createElement('button');
-        btn.className = 'page-btn' + (i === currentPage ? ' active-page' : '');
-        btn.textContent = i;
-        btn.onclick = ((pg) => () => { currentPage = pg; renderTable(); })(i);
-        c.appendChild(btn);
-    }
-
-    const next = document.createElement('button');
-    next.className = 'page-btn'; next.textContent = '›';
-    next.disabled = currentPage === totalPages;
-    next.onclick = () => { if (currentPage < totalPages) { currentPage++; renderTable(); }};
-    c.appendChild(next);
+function adminLogin(){
+  var u=document.getElementById('aUser').value,p=document.getElementById('aPass').value;
+  if(u==='admin'&&p==='lumin@2025'){adminLoggedIn=true;renderAdmin()}else alert('Invalid username or password.');
 }
 
-// ============================================================
-// DELETE TRADE
-// ============================================================
-function deleteTrade(id) {
-    if (!confirm('Delete this trade?')) return;
-    trades = trades.filter(t => t.id !== id);
-    persistTrades();
-    renderTable(); renderKPIs();
-    showToast('Trade deleted.');
+function openTestForm(id){
+  var t=id?currentTests.find(function(x){return x.id===id}):null;
+  var el=document.getElementById('adminContent');
+  el.innerHTML='<div class="modal-header"><h3>'+(t?'Edit Test':'Add New Test')+'</h3><button class="modal-close" onclick="renderAdmin()">✕</button></div>'+
+    '<div class="form-group"><label>Test Name *</label><input id="tfName" value="'+esc(t?t.name:'')+'"/></div>'+
+    '<div class="form-row"><div class="form-group"><label>Price (₹) *</label><input id="tfPrice" type="number" value="'+(t?t.price:'')+'"/></div><div class="form-group"><label>Category</label><select id="tfCat">'+categories.map(function(c){return '<option'+(t&&t.category===c?' selected':'')+'>'+c+'</option>'}).join('')+'</select></div></div>'+
+    '<div class="form-group"><label>Description</label><textarea id="tfDesc">'+esc(t?t.desc:'')+'</textarea></div>'+
+    '<div class="form-group"><label>Icon (emoji)</label><input id="tfIcon" value="'+(t?t.icon:'')+'" maxlength="4"/></div>'+
+    '<button class="btn-submit gradient-bg" onclick="saveTestForm(\''+(t?t.id:'')+'\')">'+(t?'Update':'Save')+' Test</button>';
 }
-
-// ============================================================
-// EDIT TRADE MODAL
-// ============================================================
-function openEditModal(id) {
-    const t = trades.find(t => t.id === id);
-    if (!t) return;
-    editingTradeId = id;
-    const c = document.getElementById('editFormContainer');
-    c.innerHTML = `
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
-            <div><label>Date</label><input type="date" id="e_date" value="${t.date}"></div>
-            <div><label>Ticker</label><input type="text" id="e_ticker" value="${t.ticker}" style="text-transform:uppercase;font-weight:700;"></div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
-            <div><label>Qty</label><input type="number" id="e_qty" value="${t.qty}" step="any"></div>
-            <div><label>Entry $</label><input type="number" id="e_entry" value="${t.entry}" step="any"></div>
-            <div><label>Exit $</label><input type="number" id="e_exit" value="${t.exit}" step="any"></div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
-            <div><label>Side</label>
-                <select id="e_side">
-                    <option value="BUY" ${t.side==='BUY'?'selected':''}>LONG</option>
-                    <option value="SELL" ${t.side==='SELL'?'selected':''}>SHORT</option>
-                </select>
-            </div>
-            <div><label>Fees $</label><input type="number" id="e_fees" value="${t.brokerage}" step="any"></div>
-        </div>
-        <div style="margin-bottom:8px;">
-            <label>Notes</label><input type="text" id="e_notes" value="${t.notes||''}">
-        </div>
-        <div style="display:flex;gap:8px;margin-top:16px;">
-            <button onclick="saveEditModal()" class="btn-commit" style="flex:1;padding:10px;">SAVE CHANGES</button>
-            <button onclick="closeEditModal()" style="background:var(--surface2);color:var(--text-mid);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;cursor:pointer;letter-spacing:1px;">CANCEL</button>
-        </div>`;
-    document.getElementById('editModal').classList.add('open');
+function saveTestForm(id){
+  var name=document.getElementById('tfName').value;
+  var price=parseFloat(document.getElementById('tfPrice').value);
+  var cat=document.getElementById('tfCat').value;
+  var desc=document.getElementById('tfDesc').value;
+  var icon=document.getElementById('tfIcon').value||catIconMap[cat]||'🔬';
+  if(!name)return alert('Test name is required');
+  if(isNaN(price)||price<0)return alert('Valid price is required');
+  if(id){currentTests=currentTests.map(function(t){return t.id===id?Object.assign({},t,{name:name,price:price,category:cat,desc:desc,icon:icon}):t})}
+  else{currentTests.push({id:generateId('t'),name:name,price:price,category:cat,desc:desc,icon:icon})}
+  saveTests(currentTests);renderTests();renderAdmin();
 }
+function deleteTest(id){if(confirm('Delete this test?')){currentTests=currentTests.filter(function(t){return t.id!==id});saveTests(currentTests);renderTests();renderAdmin()}}
+function exportTests(){var b=new Blob([JSON.stringify(currentTests,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='lumin-tests.json';a.click()}
+function importTests(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){try{var d=JSON.parse(ev.target.result);if(!Array.isArray(d))throw 0;currentTests=d;saveTests(d);renderTests();renderAdmin();alert('Imported '+d.length+' tests!')}catch(err){alert('Import failed.')}};r.readAsText(f);e.target.value=''}
 
-function closeEditModal() {
-    document.getElementById('editModal').classList.remove('open');
-    editingTradeId = null;
+function openPkgForm(id){
+  var p=id?currentPackages.find(function(x){return x.id===id}):null;
+  var el=document.getElementById('adminContent');
+  el.innerHTML='<div class="modal-header"><h3>'+(p?'Edit Package':'Add New Package')+'</h3><button class="modal-close" onclick="renderAdmin()">✕</button></div>'+
+    '<div class="form-group"><label>Package Name *</label><input id="pfName" value="'+esc(p?p.name:'')+'"/></div>'+
+    '<div class="form-row"><div class="form-group"><label>Original Price (₹)</label><input id="pfOrig" type="number" value="'+(p?p.origPrice:'')+'"/></div><div class="form-group"><label>Discounted Price (₹) *</label><input id="pfDisc" type="number" value="'+(p?p.discPrice:'')+'"/></div></div>'+
+    '<div class="form-group"><label>Tests Included * <small style="color:var(--gray-500)">(one per line)</small></label><textarea id="pfTests" style="min-height:120px">'+(p?p.tests.join('\n'):'')+'</textarea></div>'+
+    '<div class="form-group"><label>Description</label><textarea id="pfDesc">'+esc(p?p.desc:'')+'</textarea></div>'+
+    '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><input type="checkbox" id="pfPop"'+(p&&p.popular?' checked':'')+' style="width:18px;height:18px;accent-color:var(--primary)"/><label for="pfPop" style="font-size:.875rem;font-weight:600;cursor:pointer">Mark as Popular</label></div>'+
+    '<button class="btn-submit gradient-bg" onclick="savePkgForm(\''+(p?p.id:'')+'\')">'+(p?'Update':'Save')+' Package</button>';
 }
-
-function saveEditModal() {
-    const idx = trades.findIndex(t => t.id === editingTradeId);
-    if (idx === -1) return;
-    const t = trades[idx];
-
-    const dateStr = document.getElementById('e_date').value;
-    const [y, m, d] = dateStr.split('-').map(Number);
-    const dt = new Date(y, m - 1, d);
-    const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-
-    const qty   = parseFloat(document.getElementById('e_qty').value);
-    const entry = parseFloat(document.getElementById('e_entry').value);
-    const exit  = parseFloat(document.getElementById('e_exit').value);
-    const fees  = parseFloat(document.getElementById('e_fees').value) || 0;
-    const side  = document.getElementById('e_side').value;
-    const gross = side === 'BUY' ? (exit - entry) * qty : (entry - exit) * qty;
-    const net   = gross - fees;
-
-    trades[idx] = {
-        ...t,
-        date: dateStr,
-        year: y.toString(),
-        month: MONTHS[m - 1] + y.toString().slice(-2),
-        monthNum: m, yearNum: y, dayNum: d,
-        dow: DAYS[dt.getDay()],
-        ticker: document.getElementById('e_ticker').value.toUpperCase().trim(),
-        side, qty, entry, exit,
-        brokerage: fees,
-        grossPnl: gross,
-        pnl: net,
-        pct: t.capital > 0 ? (net / t.capital) * 100 : 0,
-        notes: document.getElementById('e_notes').value
-    };
-
-    persistTrades();
-    closeEditModal();
-    renderTable(); renderKPIs();
-    showToast('Trade updated successfully.');
+function savePkgForm(id){
+  var name=document.getElementById('pfName').value;
+  var discPrice=parseFloat(document.getElementById('pfDisc').value);
+  var origPrice=parseFloat(document.getElementById('pfOrig').value)||0;
+  var testsArr=document.getElementById('pfTests').value.split('\n').map(function(s){return s.trim()}).filter(Boolean);
+  var desc=document.getElementById('pfDesc').value;
+  var popular=document.getElementById('pfPop').checked;
+  if(!name)return alert('Package name is required');
+  if(isNaN(discPrice)||discPrice<0)return alert('Valid price is required');
+  if(!testsArr.length)return alert('Add at least one test');
+  if(id){currentPackages=currentPackages.map(function(p){return p.id===id?Object.assign({},p,{name:name,origPrice:origPrice,discPrice:discPrice,tests:testsArr,desc:desc,popular:popular}):p})}
+  else{currentPackages.push({id:generateId('p'),name:name,origPrice:origPrice,discPrice:discPrice,tests:testsArr,desc:desc,popular:popular})}
+  savePackages(currentPackages);renderPackages();renderAdmin();
 }
+function deletePkg(id){if(confirm('Delete this package?')){currentPackages=currentPackages.filter(function(p){return p.id!==id});savePackages(currentPackages);renderPackages();renderAdmin()}}
 
-// ============================================================
-// KPI BAR — BUG FIX: profit factor division by zero guarded
-// ============================================================
-function renderKPIs(dataArray) {
-    const src = dataArray || trades;
-    const net   = src.reduce((a, b) => a + b.pnl, 0);
-    const fees  = src.reduce((a, b) => a + b.brokerage, 0);
-    const wins  = src.filter(t => t.pnl > 0);
-    const losses = src.filter(t => t.pnl < 0);
-    const winRate = src.length ? (wins.length / src.length * 100).toFixed(1) : 0;
-    const disc   = src.length ? (src.filter(t => t.rules === 'Yes').length / src.length * 100).toFixed(0) : 0;
-
-    const totalWin  = wins.reduce((a, b) => a + b.pnl, 0);
-    const totalLoss = Math.abs(losses.reduce((a, b) => a + b.pnl, 0));
-    // BUG FIX: prevent division by zero in profit factor
-    const pf = totalLoss > 0 ? (totalWin / totalLoss).toFixed(2) : totalWin > 0 ? '∞' : '0.00';
-
-    const hLoss   = losses.length ? Math.min(...losses.map(t => t.pnl)) : 0;
-    const hProfit = wins.length   ? Math.max(...wins.map(t => t.pnl))   : 0;
-
-    // BUG FIX: streak now correctly traverses trades in chronological order
-    const sorted = [...src].sort((a, b) => new Date(a.date) - new Date(b.date));
-    let curW = 0, curL = 0, maxW = 0, maxL = 0;
-    sorted.forEach(t => {
-        if (t.pnl > 0) { curW++; curL = 0; maxW = Math.max(maxW, curW); }
-        else if (t.pnl < 0) { curL++; curW = 0; maxL = Math.max(maxL, curL); }
-    });
-
-    const avgRR = src.length ? (src.reduce((a, b) => a + (b.rr || 0), 0) / src.length).toFixed(2) : '0.00';
-    const expectancy = src.length ? (net / src.length).toFixed(2) : '0.00';
-
-    const stats = [
-        { l: 'Net P&L',       v: `$${net.toFixed(0)}`,    pos: net >= 0 },
-        { l: 'Win Rate',      v: `${winRate}%`,            pos: parseFloat(winRate) >= 50 },
-        { l: 'Profit Factor', v: pf,                       pos: parseFloat(pf) >= 1 },
-        { l: 'Expectancy',    v: `$${expectancy}`,         pos: parseFloat(expectancy) >= 0 },
-        { l: 'Max Profit',    v: `$${hProfit.toFixed(0)}`, pos: true },
-        { l: 'Max Loss',      v: `$${hLoss.toFixed(0)}`,   pos: false },
-        { l: 'Win Streak',    v: `${maxW} 🔥`,             pos: true },
-        { l: 'Lose Streak',   v: `${maxL} 🧊`,             pos: false },
-        { l: 'Avg R/R',       v: avgRR,                    pos: parseFloat(avgRR) >= 1 },
-        { l: 'Discipline',    v: `${disc}%`,               pos: parseFloat(disc) >= 70 },
-        { l: 'Total Fees',    v: `$${fees.toFixed(0)}`,    pos: false },
-        { l: 'Trades',        v: src.length,               pos: true }
-    ];
-
-    document.getElementById('kpi-bar').innerHTML = stats.map(s => `
-        <div class="stat-card ${!s.pos ? 'negative' : ''}" style="padding:8px 10px;">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:2px;">${s.l}</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:${s.pos ? 'var(--win)' : 'var(--loss)'};">${s.v}</div>
-        </div>`).join('');
+function saveContactAdmin(){
+  var nl2br=function(s){return s.replace(/\n/g,'<br/>')};
+  currentContact={address:nl2br(document.getElementById('cAddr').value.trim()),phone:document.getElementById('cPhone').value.trim(),email:document.getElementById('cEmail').value.trim(),hours:nl2br(document.getElementById('cHours').value.trim()),mapUrl:document.getElementById('cMap').value.trim()};
+  saveContact(currentContact);renderContact();alert('Contact details saved!');
 }
+function resetContactAdmin(){if(!confirm('Reset?'))return;currentContact=Object.assign({},defaultContact);saveContact(currentContact);renderContact();renderAdmin()}
 
-// ============================================================
-// DASHBOARD CHARTS — BUG FIX: cumulative chart was broken
-// when filters left empty array; chart destroy improved
-// ============================================================
-function getChartDefaults() {
-    return {
-        plugins: {
-            legend: { display: false },
-            tooltip: {
-                backgroundColor: '#0f1623',
-                borderColor: '#1e2d47',
-                borderWidth: 1,
-                titleColor: '#00e5a0',
-                bodyColor: '#8aa4c0',
-                titleFont: { family: "'JetBrains Mono'" },
-                bodyFont:  { family: "'JetBrains Mono'" }
-            }
-        },
-        scales: {
-            x: { ticks: { color: '#4a6080', font: { family: "'JetBrains Mono'", size: 9 } }, grid: { color: 'rgba(30,45,71,0.5)' } },
-            y: { ticks: { color: '#4a6080', font: { family: "'JetBrains Mono'", size: 9 } }, grid: { color: 'rgba(30,45,71,0.5)' } }
-        }
-    };
-}
-
-function destroyChart(key) {
-    if (chartInstances[key]) {
-        try { chartInstances[key].destroy(); } catch(e) {}
-        delete chartInstances[key];
-    }
-}
-
-function sumData(arr, key) {
-    const map = {};
-    arr.forEach(t => { map[t[key]] = (map[t[key]] || 0) + t.pnl; });
-    return { labels: Object.keys(map), values: Object.values(map) };
-}
-
-function safeChart(id, config) {
-    destroyChart(id);
-    const el = document.getElementById(id);
-    if (!el) return;
-    // BUG FIX: reset canvas to avoid "Canvas is already in use" error
-    const parent = el.parentNode;
-    const newCanvas = document.createElement('canvas');
-    newCanvas.id = id;
-    parent.replaceChild(newCanvas, el);
-    chartInstances[id] = new Chart(newCanvas, config);
-}
-
-function renderDashboard() {
-    const fY = document.getElementById('fYear').value,
-          fM = document.getElementById('fMonth').value,
-          fT = document.getElementById('fType').value,
-          fS = document.getElementById('fSide').value,
-          fR = document.getElementById('fRules').value;
-
-    const filtered = trades.filter(t =>
-        (fY === 'All' || t.year === fY) &&
-        (fM === 'All' || t.month === fM) &&
-        (fT === 'All' || t.type === fT) &&
-        (fS === 'All' || t.side === fS) &&
-        (fR === 'All' || t.rules === fR)
-    ).sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    const opt = getChartDefaults();
-
-    // Daily P&L
-    const daily = sumData(filtered, 'date');
-    safeChart('chartDailyPnl', {
-        type: 'bar',
-        data: { labels: daily.labels, datasets: [{ data: daily.values, backgroundColor: daily.values.map(v => v >= 0 ? 'rgba(0,229,160,0.7)' : 'rgba(255,64,96,0.7)'), borderRadius: 3 }] },
-        options: opt
-    });
-
-    // Strategy P&L
-    const strat = sumData(filtered, 'strategy');
-    safeChart('chartStrategyPnl', {
-        type: 'bar',
-        data: { labels: strat.labels, datasets: [{ label: 'Strategy P&L', data: strat.values, backgroundColor: 'rgba(0,102,255,0.6)', borderRadius: 3 }] },
-        options: { ...opt, indexAxis: 'y' }
-    });
-
-    // Confidence P&L
-    const conf = sumData(filtered, 'confidence');
-    safeChart('chartConfidencePnl', {
-        type: 'bar',
-        data: { labels: conf.labels, datasets: [{ data: conf.values, backgroundColor: 'rgba(0,229,160,0.5)', borderRadius: 3 }] },
-        options: opt
-    });
-
-    // BUG FIX: cumulative growth — was using bal as closure var incorrectly in some edge cases
-    let bal = 0;
-    const cumData = filtered.map(t => { bal += t.pnl; return bal; });
-    const cumDates = filtered.map(t => t.date);
-    safeChart('chartCumulative', {
-        type: 'line',
-        data: {
-            labels: cumDates,
-            datasets: [{
-                label: 'Cumulative P&L',
-                data: cumData,
-                borderColor: '#00e5a0',
-                backgroundColor: 'rgba(0,229,160,0.07)',
-                fill: true,
-                tension: 0.3,
-                pointRadius: cumData.length > 50 ? 0 : 3,
-                borderWidth: 2
-            }]
-        },
-        options: { ...opt, plugins: { ...opt.plugins, legend: { display: false } } }
-    });
-
-    // Long vs Short
-    const longPnl  = filtered.filter(t => t.side === 'BUY').reduce((a, b) => a + b.pnl, 0);
-    const shortPnl = filtered.filter(t => t.side === 'SELL').reduce((a, b) => a + b.pnl, 0);
-    safeChart('chartSidePnl', {
-        type: 'doughnut',
-        data: {
-            labels: ['LONG', 'SHORT'],
-            datasets: [{ data: [longPnl, shortPnl], backgroundColor: ['rgba(0,229,160,0.7)', 'rgba(255,64,96,0.7)'], borderWidth: 0 }]
-        },
-        options: { plugins: { legend: { display: true, labels: { color: '#8aa4c0', font: { family: "'JetBrains Mono'", size: 9 } } } } }
-    });
-
-    // Psychology
-    const psych = sumData(filtered, 'emotion');
-    safeChart('chartPsychPnl', {
-        type: 'polarArea',
-        data: { labels: psych.labels, datasets: [{ data: psych.values, backgroundColor: ['#00e5a080','#3b82f680','#ef444480','#f59e0b80','#6366f180','#10b98180','#f9731680'] }] },
-        options: { plugins: { legend: { display: true, labels: { color: '#8aa4c0', font: { family: "'JetBrains Mono'", size: 9 }, boxWidth: 10 } } } }
-    });
-
-    // Entry reason
-    const eR = sumData(filtered, 'entryReason');
-    safeChart('chartEntryReason', {
-        type: 'bar',
-        data: { labels: eR.labels, datasets: [{ data: eR.values, backgroundColor: eR.values.map(v => v >= 0 ? 'rgba(0,229,160,0.6)' : 'rgba(255,64,96,0.6)'), borderRadius: 3 }] },
-        options: opt
-    });
-
-    // Exit reason
-    const xR = sumData(filtered, 'exitReason');
-    safeChart('chartExitReason', {
-        type: 'bar',
-        data: { labels: xR.labels, datasets: [{ data: xR.values, backgroundColor: xR.values.map(v => v >= 0 ? 'rgba(0,229,160,0.6)' : 'rgba(255,64,96,0.6)'), borderRadius: 3 }] },
-        options: opt
-    });
-
-    // Weekday
-    const ORDER = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-    const wkMap = {};
-    ORDER.forEach(d => { wkMap[d] = 0; });
-    filtered.forEach(t => { if (t.dow) wkMap[t.dow] = (wkMap[t.dow] || 0) + t.pnl; });
-    const wkLabels = ORDER.filter(d => wkMap[d] !== undefined);
-    const wkVals = wkLabels.map(d => wkMap[d]);
-    safeChart('chartWeekday', {
-        type: 'bar',
-        data: { labels: wkLabels.map(d => d.slice(0,3).toUpperCase()), datasets: [{ data: wkVals, backgroundColor: wkVals.map(v => v >= 0 ? 'rgba(99,102,241,0.7)' : 'rgba(255,64,96,0.6)'), borderRadius: 3 }] },
-        options: opt
-    });
-
-    // Day RR — BUG FIX: was averaging wrong; divide by correct per-day count
-    const rrByDate = {};
-    const rrCountByDate = {};
-    filtered.forEach(t => {
-        rrByDate[t.date] = (rrByDate[t.date] || 0) + (t.rr || 0);
-        rrCountByDate[t.date] = (rrCountByDate[t.date] || 0) + 1;
-    });
-    const rrDates = Object.keys(rrByDate);
-    const rrAvgs  = rrDates.map(d => parseFloat((rrByDate[d] / rrCountByDate[d]).toFixed(2)));
-    safeChart('chartDayRR', {
-        type: 'line',
-        data: {
-            labels: rrDates,
-            datasets: [{ label: 'Avg R/R', data: rrAvgs, borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.08)', fill: true, tension: 0.3, borderWidth: 2, pointRadius: rrAvgs.length > 40 ? 0 : 3 }]
-        },
-        options: opt
-    });
-
-    // Timeframe
-    const tf = sumData(filtered, 'timeframe');
-    safeChart('chartTimeframe', {
-        type: 'bar',
-        data: { labels: tf.labels, datasets: [{ data: tf.values, backgroundColor: 'rgba(245,158,11,0.6)', borderRadius: 3 }] },
-        options: opt
-    });
-
-    // Histogram — P&L distribution buckets
-    const pnlVals = filtered.map(t => t.pnl);
-    if (pnlVals.length > 0) {
-        const minV = Math.floor(Math.min(...pnlVals) / 50) * 50;
-        const maxV = Math.ceil(Math.max(...pnlVals) / 50) * 50;
-        const buckets = {};
-        for (let b = minV; b <= maxV; b += 50) buckets[b] = 0;
-        pnlVals.forEach(v => {
-            const k = Math.floor(v / 50) * 50;
-            buckets[k] = (buckets[k] || 0) + 1;
-        });
-        safeChart('chartHistogram', {
-            type: 'bar',
-            data: {
-                labels: Object.keys(buckets).map(k => '$' + k),
-                datasets: [{ data: Object.values(buckets), backgroundColor: Object.keys(buckets).map(k => parseFloat(k) >= 0 ? 'rgba(0,229,160,0.6)' : 'rgba(255,64,96,0.6)'), borderRadius: 2 }]
-            },
-            options: { ...opt, plugins: { ...opt.plugins, legend: { display: false } } }
-        });
-    }
-
-    // Type breakdown
-    const typeData = sumData(filtered, 'type');
-    safeChart('chartTypePnl', {
-        type: 'pie',
-        data: {
-            labels: typeData.labels,
-            datasets: [{ data: typeData.values, backgroundColor: ['rgba(0,229,160,0.7)','rgba(0,102,255,0.7)','rgba(245,158,11,0.7)','rgba(99,102,241,0.7)','rgba(255,64,96,0.7)'], borderWidth: 0 }]
-        },
-        options: { plugins: { legend: { display: true, labels: { color: '#8aa4c0', font: { family: "'JetBrains Mono'", size: 9 }, boxWidth: 10 } } } }
-    });
-
-    // Rules discipline
-    const ruleWin  = filtered.filter(t => t.rules === 'Yes').reduce((a, b) => a + b.pnl, 0);
-    const ruleBreak = filtered.filter(t => t.rules === 'No').reduce((a, b) => a + b.pnl, 0);
-    safeChart('chartRules', {
-        type: 'doughnut',
-        data: {
-            labels: ['Followed Rules', 'Broke Rules'],
-            datasets: [{ data: [ruleWin, ruleBreak], backgroundColor: ['rgba(0,229,160,0.7)', 'rgba(255,64,96,0.7)'], borderWidth: 0 }]
-        },
-        options: { plugins: { legend: { display: true, labels: { color: '#8aa4c0', font: { family: "'JetBrains Mono'", size: 9 }, boxWidth: 10 } } } }
-    });
-}
-
-// ============================================================
-// FILTER POPULATE
-// ============================================================
-function populateFilters() {
-    const years  = [...new Set(trades.map(t => t.year))].sort();
-    const months = [...new Set(trades.map(t => t.month))];
-    document.getElementById('fYear').innerHTML  = '<option value="All">All Years</option>'  + years.map(y => `<option>${y}</option>`).join('');
-    document.getElementById('fMonth').innerHTML = '<option value="All">All Months</option>' + months.map(m => `<option>${m}</option>`).join('');
-}
-
-function resetDashboardFilters() {
-    document.querySelectorAll('#filter-bar select').forEach(s => s.value = 'All');
-    renderDashboard();
-}
-
-// ============================================================
-// HEATMAP
-// ============================================================
-function populateHeatYears() {
-    const years = [...new Set(trades.map(t => t.year))].sort().reverse();
-    const sel = document.getElementById('heatYear');
-    sel.innerHTML = (years.length ? years : [new Date().getFullYear().toString()])
-        .map(y => `<option>${y}</option>`).join('');
-}
-
-function renderHeatmap() {
-    const year = parseInt(document.getElementById('heatYear')?.value) || new Date().getFullYear();
-    const container = document.getElementById('heatmapContainer');
-    const statsDiv  = document.getElementById('heatmapStats');
-
-    // Build daily PnL map
-    const dayMap = {};
-    trades.filter(t => t.yearNum === year || t.year === year.toString()).forEach(t => {
-        dayMap[t.date] = (dayMap[t.date] || 0) + t.pnl;
-    });
-
-    const maxAbs = Math.max(...Object.values(dayMap).map(Math.abs), 1);
-
-    const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
-    let html = `<div style="display:flex;gap:20px;flex-wrap:wrap;">`;
-    for (let mo = 0; mo < 12; mo++) {
-        const firstDay = new Date(year, mo, 1);
-        const daysInMonth = new Date(year, mo + 1, 0).getDate();
-        const startDow = (firstDay.getDay() + 6) % 7; // Monday-first
-
-        html += `<div style="min-width:160px;">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mid);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">${MONTH_NAMES[mo]} ${year}</div>
-            <div style="display:grid;grid-template-columns:repeat(7,14px);gap:2px;">
-            <span style="font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--text-dim);text-align:center;">M</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--text-dim);text-align:center;">T</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--text-dim);text-align:center;">W</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--text-dim);text-align:center;">T</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--text-dim);text-align:center;">F</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--text-dim);text-align:center;">S</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--text-dim);text-align:center;">S</span>`;
-
-        for (let i = 0; i < startDow; i++) html += `<div></div>`;
-
-        for (let day = 1; day <= daysInMonth; day++) {
-            const dateStr = `${year}-${String(mo+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-            const pnl = dayMap[dateStr];
-            let bg = 'var(--border)';
-            if (pnl !== undefined) {
-                if (pnl >= 0) {
-                    const intensity = Math.min(pnl / maxAbs, 1);
-                    const g = Math.round(40 + intensity * 189);
-                    const r = Math.round(0 + intensity * 10);
-                    bg = `rgb(${r},${g},${Math.round(60 + intensity * 100)})`;
-                } else {
-                    const intensity = Math.min(Math.abs(pnl) / maxAbs, 1);
-                    const r = Math.round(100 + intensity * 155);
-                    bg = `rgb(${r},${Math.round(30 - intensity*20)},${Math.round(40 - intensity*20)})`;
-                }
-            }
-            const title = pnl !== undefined ? `${dateStr}: $${pnl.toFixed(2)}` : dateStr;
-            html += `<div class="heatmap-cell" style="background:${bg};" title="${title}"></div>`;
-        }
-        html += `</div></div>`;
-    }
-    html += `</div>`;
-    container.innerHTML = html;
-
-    // Monthly stats
-    const monthlyPnl = {};
-    Object.entries(dayMap).forEach(([date, pnl]) => {
-        const mo = date.slice(0, 7);
-        monthlyPnl[mo] = (monthlyPnl[mo] || 0) + pnl;
-    });
-    statsDiv.innerHTML = Object.entries(monthlyPnl).map(([mo, pnl]) => `
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:1px;margin-bottom:4px;">${mo}</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:${pnl >= 0 ? 'var(--win)' : 'var(--loss)'};">$${pnl.toFixed(2)}</div>
-        </div>`).join('');
-}
-
-// ============================================================
-// NOTES
-// ============================================================
-function renderNotesList() {
-    const c = document.getElementById('notesList');
-    c.innerHTML = '';
-    notes.forEach(n => {
-        const el = document.createElement('div');
-        el.style.cssText = `padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface);cursor:pointer;transition:border-color 0.2s;`;
-        el.innerHTML = `<div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${n.title || 'Untitled'}</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text-dim);margin-top:3px;">${n.date}</div>`;
-        el.onclick = () => openNote(n.id);
-        el.onmouseover = () => el.style.borderColor = 'var(--accent)';
-        el.onmouseout  = () => el.style.borderColor = 'var(--border)';
-        c.appendChild(el);
-    });
-}
-
-function addNote() {
-    const n = { id: Date.now().toString(), title: 'New Note', content: '', date: new Date().toLocaleDateString() };
-    notes.unshift(n);
-    persistNotes();
-    renderNotesList();
-    openNote(n.id);
-}
-
-function openNote(id) {
-    editingNoteId = id;
-    const n = notes.find(n => n.id === id);
-    if (!n) return;
-    document.getElementById('noteTitle').value   = n.title;
-    document.getElementById('noteContent').value = n.content;
-    document.getElementById('noteEditor').style.display = 'block';
-    document.getElementById('noteEmpty').style.display  = 'none';
-}
-
-function saveNote() {
-    const idx = notes.findIndex(n => n.id === editingNoteId);
-    if (idx === -1) return;
-    notes[idx].title   = document.getElementById('noteTitle').value;
-    notes[idx].content = document.getElementById('noteContent').value;
-    notes[idx].date    = new Date().toLocaleDateString();
-    persistNotes();
-    renderNotesList();
-    showToast('Note saved.');
-}
-
-function deleteNote() {
-    if (!confirm('Delete this note?')) return;
-    notes = notes.filter(n => n.id !== editingNoteId);
-    editingNoteId = null;
-    persistNotes();
-    renderNotesList();
-    document.getElementById('noteEditor').style.display = 'none';
-    document.getElementById('noteEmpty').style.display  = 'flex';
-}
-
-// ============================================================
-// EXPORT
-// ============================================================
-function exportExcel() {
-    if (!trades.length) { showToast('No trades to export.', 'error'); return; }
-    const ws = XLSX.utils.json_to_sheet(trades.map(t => ({
-        Date: t.date, Ticker: t.ticker, Type: t.type, Strategy: t.strategy,
-        Side: t.side === 'BUY' ? 'LONG' : 'SHORT', Qty: t.qty,
-        Entry: t.entry, Exit: t.exit, StopLoss: t.stopLoss, Target: t.targetPrice,
-        'Gross P&L': t.grossPnl, Fees: t.brokerage, 'Net P&L': t.pnl,
-        '% Return': parseFloat(t.pct.toFixed(2)), RR: t.rr,
-        Confidence: t.confidence, Timeframe: t.timeframe,
-        EntryReason: t.entryReason, ExitReason: t.exitReason,
-        Rules: t.rules, Psychology: t.emotion, Notes: t.notes || ''
-    })));
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Trades');
-    XLSX.writeFile(wb, `ApexTerminal_${new Date().toISOString().slice(0,10)}.xlsx`);
-    showToast('Exported to Excel.');
-}
-
-// ============================================================
-// IMPORT
-// ============================================================
-function triggerImport() { document.getElementById('importFileInput').click(); }
-
-function importData(input) {
-    const file = input.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        try {
-            let imported = [];
-            if (file.name.endsWith('.json')) {
-                imported = JSON.parse(e.target.result);
-            } else if (file.name.endsWith('.csv')) {
-                const lines = e.target.result.trim().split('\n');
-                const headers = lines[0].split(',').map(h => h.trim().replace(/"/g,''));
-                imported = lines.slice(1).map(line => {
-                    const vals = line.split(',').map(v => v.trim().replace(/"/g,''));
-                    const obj = {};
-                    headers.forEach((h, i) => obj[h] = vals[i]);
-                    return obj;
-                });
-            }
-            if (!Array.isArray(imported) || !imported.length) { showToast('No valid data found.', 'error'); return; }
-            if (confirm(`Import ${imported.length} records? Existing data will be kept.`)) {
-                // Merge, deduplicating by id
-                const existingIds = new Set(trades.map(t => t.id));
-                const newTrades = imported.filter(t => t.id && !existingIds.has(t.id));
-                trades = [...trades, ...newTrades];
-                persistTrades();
-                renderTable(); renderKPIs();
-                showToast(`Imported ${newTrades.length} new trades.`);
-            }
-        } catch(err) { showToast('Import failed: ' + err.message, 'error'); }
-    };
-    reader.readAsText(file);
-    input.value = '';
-}
-
-// ============================================================
-// WIPE
-// ============================================================
-function clearData() {
-    if (!confirm('⚠ Wipe ALL trade data? This cannot be undone.')) return;
-    trades = [];
-    persistTrades();
-    renderTable(); renderKPIs();
-    location.reload();
-}
-
-// ============================================================
-// INIT
-// ============================================================
-window.onload = () => {
-    migrateOldData();
-    renderLists();
-    document.getElementById('date').value = new Date().toISOString().split('T')[0];
-    populateHeatYears();
-    renderTable();
-    renderKPIs();
-
-    // Drag-over import support
-    document.body.addEventListener('dragover', e => e.preventDefault());
-    document.body.addEventListener('drop', e => {
-        e.preventDefault();
-        const file = e.dataTransfer.files[0];
-        if (file && (file.name.endsWith('.json') || file.name.endsWith('.csv'))) {
-            const fakeInput = { files: [file] };
-            importData(fakeInput);
-        }
-    });
-};
-</script>
-</body>
-</html>
+populateCatFilter();renderTests();renderPackages();renderContact();
+</script></body></html>
